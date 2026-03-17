@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Новый проект</title>
+  <script src="https://www.marzipano.net/releases/0.10.2/marzipano.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: system-ui, -apple-system, sans-serif; }
+    #viewer { width: 100%; height: 100%; }
+    
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      z-index: 10;
+    }
+    .hotspot:hover { transform: translate(-50%, -50%) scale(1.15) !important; }
+    
+    .hotspot-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    
+    .hotspot-transition .hotspot-icon { animation: pulse 2s infinite; }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
+    }
+    
+    .hotspot-label {
+      position: absolute;
+      white-space: nowrap;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      transform: translateY(-100%) translateX(-50%);
+      top: -8px;
+      left: 50%;
+      pointer-events: none;
+    }
+    
+    .scene-title {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      padding: 12px 20px;
+      border-radius: 8px;
+      z-index: 20;
+      color: white;
+    }
+    .scene-title h2 { font-size: 16px; margin: 0 0 4px 0; }
+    .scene-title p { font-size: 11px; opacity: 0.7; margin: 0; }
+    
+    .home-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      transition: background 0.2s;
+    }
+    .home-btn:hover { background: rgba(0,0,0,0.9); }
+    .home-btn.hidden { display: none; }
+    
+    .thumbnail-gallery {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      z-index: 20;
+    }
+    
+    .thumbnail {
+      width: 80px;
+      height: 50px;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+      position: relative;
+    }
+    .thumbnail:hover { border-color: rgba(255,255,255,0.5); }
+    .thumbnail.active { border-color: #f97316; }
+    .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+    .thumbnail .home-indicator {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      background: #f97316;
+      border-radius: 4px 0 0 0;
+      padding: 2px;
+    }
+    
+    .loading {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      color: #fff;
+      z-index: 100;
+    }
+    .loading.hidden { display: none; }
+    
+    /* Info Popup */
+    .info-popup {
+      position: absolute;
+      background: rgba(20,20,25,0.95);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      max-width: 340px;
+      min-width: 280px;
+      z-index: 30;
+      overflow: hidden;
+    }
+    .info-popup.hidden { display: none; }
+    .info-popup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .info-popup-header h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      margin: 0;
+    }
+    .info-popup-close {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+    }
+    .info-popup-close:hover { background: rgba(255,255,255,0.1); }
+    .info-popup-images {
+      position: relative;
+    }
+    .info-popup-images img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .info-popup-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+    }
+    .info-popup-nav.prev { left: 8px; }
+    .info-popup-nav.next { right: 8px; }
+    .info-popup-dots {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 4px;
+    }
+    .info-popup-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+    }
+    .info-popup-dot.active { background: white; }
+    .info-popup-content {
+      padding: 12px 16px;
+    }
+    .info-popup-content p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.5;
+      margin: 0;
+      white-space: pre-wrap;
+    }
+    .info-popup-empty {
+      padding: 24px;
+      text-align: center;
+      color: rgba(255,255,255,0.5);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading" class="loading">Загрузка панорамы...</div>
+  <div id="viewer"></div>
+  <div class="scene-title">
+    <h2 id="scene-name"></h2>
+    <p id="scene-info"></p>
+  </div>
+  <button id="home-btn" class="home-btn hidden" onclick="goHome()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  </button>
+  <div class="thumbnail-gallery" id="thumbnails"></div>
+  <div id="info-popup" class="info-popup hidden"></div>
+  
+  <script>
+    const SCENES_DATA = [{"id":"1773784874280-b81m24vdc","name":"1","imageUrl":"images/1773784874280-b81m24vdc.jpg","initialView":{"yaw":0.8653911708950286,"pitch":0.020312021467177033,"fov":1.5707963267948966},"hotspots":[{"id":"1773784890782-gv9bl54h3","type":"transition","yaw":0.21876213897880348,"pitch":0.513159943436893,"text":"","targetSceneId":"1773784886113-jyfakma1l","color":"#f97316","images":[],"positionType":"floor","icon":"arrowUp"},{"id":"1773785004391-5ypk21ovg","type":"transition","yaw":2.390832781794918,"pitch":0.4839250784650879,"text":"","targetSceneId":"1773784997909-bh68nlyqe","color":"#f97316","images":[],"icon":"arrowUp","positionType":"floor"}]},{"id":"1773784886113-jyfakma1l","name":"2","imageUrl":"images/1773784886113-jyfakma1l.jpg","initialView":{"yaw":-0.029256363955813214,"pitch":0.062628732857128,"fov":1.5707963267948966},"hotspots":[{"id":"1773784907623-92ew4zh4n","type":"transition","yaw":0.5172873632480055,"pitch":0.4440945440492836,"text":"","targetSceneId":"1773784874280-b81m24vdc","color":"#f97316","images":[],"icon":"arrowUp","positionType":"floor"},{"id":"1773791404736-wr8y1ejyp","icon":"infoFilled","size":40,"rotation":0,"opacity":1,"positionType":"embedded","description":"Бутылка","images":[{"url":"images/hotspot_1773791404736-wr8y1ejyp_0.jpg","file":{},"caption":""}],"type":"info","yaw":-0.5261952987897729,"pitch":0.5298209484322953,"text":"Стол","targetSceneId":null,"color":"#3b82f6"}]},{"id":"1773784997909-bh68nlyqe","name":"3","imageUrl":"images/1773784997909-bh68nlyqe.jpg","initialView":{"yaw":0,"pitch":0,"fov":1.5707963267948966},"hotspots":[{"id":"1773791332833-hxryrjn88","icon":"arrowUp","size":40,"rotation":0,"opacity":1,"positionType":"floor","description":"","images":[],"type":"transition","yaw":-0.48412253887359036,"pitch":0.3859248961941901,"text":"","targetSceneId":"1773784874280-b81m24vdc","color":"#f97316"}]}];
+    const MARKER_STYLE = {"textColor":"#ffffff","backgroundColor":"#000000","backgroundOpacity":0.75,"borderWidth":2,"borderColor":"#000000"};
+    const HOME_SCENE_ID = "1773784874280-b81m24vdc";
+    
+    let viewer, currentScene, currentSceneData, hotspotsContainer, animationFrameId, currentSceneId;
+    let popupImageIndex = 0;
+    
+    // Icon SVGs
+    const ICONS = {
+      arrowRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+      arrowLeft: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>',
+      arrowUp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>',
+      arrowDown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>',
+      arrowCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+      info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+      mapPin: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
+      drone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="10" width="8" height="4" rx="1"/><circle cx="4" cy="6" r="2"/><circle cx="20" cy="6" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><line x1="6" y1="7" x2="9" y2="10"/><line x1="18" y1="7" x2="15" y2="10"/><line x1="6" y1="17" x2="9" y2="14"/><line x1="18" y1="17" x2="15" y2="14"/></svg>',
+      home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+      eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+    };
+    
+    function getIcon(id) {
+      return ICONS[id] || ICONS.arrowRight;
+    }
+    
+    function init() {
+      viewer = new Marzipano.Viewer(document.getElementById('viewer'));
+      hotspotsContainer = document.createElement('div');
+      hotspotsContainer.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:10;';
+      document.getElementById('viewer').appendChild(hotspotsContainer);
+      
+      renderThumbnails();
+      if (SCENES_DATA.length > 0) {
+        loadScene(HOME_SCENE_ID || SCENES_DATA[0].id);
+      }
+    }
+    
+    function renderThumbnails() {
+      const container = document.getElementById('thumbnails');
+      if (SCENES_DATA.length <= 1) {
+        container.style.display = 'none';
+        return;
+      }
+      SCENES_DATA.forEach(scene => {
+        const thumb = document.createElement('div');
+        thumb.className = 'thumbnail';
+        thumb.dataset.sceneId = scene.id;
+        thumb.innerHTML = '<img src="' + scene.imageUrl + '" alt="' + scene.name + '">' + 
+          (scene.id === HOME_SCENE_ID ? '<div class="home-indicator"><svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>' : '');
+        thumb.onclick = () => loadScene(scene.id);
+        container.appendChild(thumb);
+      });
+    }
+    
+    function loadScene(sceneId) {
+      const sceneData = SCENES_DATA.find(s => s.id === sceneId);
+      if (!sceneData) return;
+      
+      document.getElementById('loading').classList.remove('hidden');
+      closeInfoPopup();
+      
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      if (currentScene) viewer.destroyScene(currentScene);
+      
+      currentSceneData = sceneData;
+      currentSceneId = sceneId;
+      
+      var levels = [{ width: 4096 }];
+      var source = Marzipano.ImageUrlSource.fromString(sceneData.imageUrl);
+      var geometry = new Marzipano.EquirectGeometry(levels);
+      var limiter = Marzipano.RectilinearView.limit.traditional(4096, 100*Math.PI/180, 120*Math.PI/180);
+      var view = new Marzipano.RectilinearView(sceneData.initialView, limiter);
+      
+      currentScene = viewer.createScene({ source: source, geometry: geometry, view: view, pinFirstLevel: true });
+      currentScene.switchTo({}, function() {
+        document.getElementById('loading').classList.add('hidden');
+      });
+      
+      document.getElementById('scene-name').textContent = sceneData.name;
+      document.getElementById('scene-info').textContent = (sceneData.hotspots.length || 0) + ' меток';
+      
+      // Show/hide home button
+      var homeBtn = document.getElementById('home-btn');
+      if (HOME_SCENE_ID && HOME_SCENE_ID !== sceneId) {
+        homeBtn.classList.remove('hidden');
+      } else {
+        homeBtn.classList.add('hidden');
+      }
+      
+      document.querySelectorAll('.thumbnail').forEach(t => {
+        t.classList.toggle('active', t.dataset.sceneId === sceneId);
+      });
+      
+      renderHotspots(sceneData);
+    }
+    
+    function goHome() {
+      if (HOME_SCENE_ID) loadScene(HOME_SCENE_ID);
+    }
+    
+    function renderHotspots(sceneData) {
+      hotspotsContainer.innerHTML = '';
+      if (!sceneData.hotspots || sceneData.hotspots.length === 0) return;
+      
+      sceneData.hotspots.forEach(hotspot => {
+        const element = document.createElement('div');
+        element.className = 'hotspot ' + (hotspot.type === 'transition' ? 'hotspot-transition' : 'hotspot-info');
+        element.style.pointerEvents = 'auto';
+        
+        const size = hotspot.size || 40;
+        const rotation = hotspot.rotation || 0;
+        const opacity = hotspot.opacity !== undefined ? hotspot.opacity : 1;
+        const color = hotspot.color || (hotspot.type === 'info' ? '#3b82f6' : '#f97316');
+        
+        element.innerHTML = '<div class="hotspot-icon" style="width:' + size + 'px;height:' + size + 'px;background:' + color + ';opacity:' + opacity + ';transform:rotate(' + rotation + 'deg)">' + 
+          '<div style="width:50%;height:50%;color:white">' + getIcon(hotspot.icon || (hotspot.type === 'info' ? 'info' : 'arrowRight')) + '</div>' +
+          '</div>';
+        
+        // Label for info hotspots
+        if (hotspot.type === 'info' && hotspot.text) {
+          const label = document.createElement('div');
+          label.className = 'hotspot-label';
+          label.textContent = hotspot.text;
+          label.style.color = MARKER_STYLE.textColor;
+          label.style.backgroundColor = MARKER_STYLE.backgroundColor + Math.round(MARKER_STYLE.backgroundOpacity * 255).toString(16).padStart(2, '0');
+          label.style.border = MARKER_STYLE.borderWidth + 'px solid ' + MARKER_STYLE.borderColor;
+          element.appendChild(label);
+        }
+        
+        // Click handler
+        if (hotspot.type === 'transition' && hotspot.targetSceneId) {
+          element.onclick = () => loadScene(hotspot.targetSceneId);
+        } else if (hotspot.type === 'info') {
+          element.onclick = (e) => {
+            e.stopPropagation();
+            showInfoPopup(hotspot, e.clientX, e.clientY);
+          };
+        }
+        
+        hotspotsContainer.appendChild(element);
+      });
+      
+      function updatePositions() {
+        if (!currentScene) return;
+        const view = currentScene.view();
+        const hotspotElements = hotspotsContainer.querySelectorAll('.hotspot');
+        
+        currentSceneData.hotspots.forEach((hotspot, index) => {
+          const el = hotspotElements[index];
+          if (!el) return;
+          
+          const coords = view.coordinatesToScreen({ yaw: hotspot.yaw, pitch: hotspot.pitch });
+          if (coords && coords.x >= 0 && coords.x <= window.innerWidth && coords.y >= 0 && coords.y <= window.innerHeight) {
+            el.style.left = coords.x + 'px';
+            el.style.top = coords.y + 'px';
+            el.style.transform = 'translate(-50%, -50%)';
+            el.style.display = 'block';
+          } else {
+            el.style.display = 'none';
+          }
+        });
+        
+        animationFrameId = requestAnimationFrame(updatePositions);
+      }
+      updatePositions();
+    }
+    
+    function showInfoPopup(hotspot, x, y) {
+      popupImageIndex = 0;
+      const popup = document.getElementById('info-popup');
+      popup.innerHTML = '';
+      
+      // Header
+      const header = document.createElement('div');
+      header.className = 'info-popup-header';
+      header.innerHTML = '<h3>' + (hotspot.text || 'Информация') + '</h3><button class="info-popup-close" onclick="closeInfoPopup()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+      popup.appendChild(header);
+      
+      // Images
+      if (hotspot.images && hotspot.images.length > 0) {
+        const imagesDiv = document.createElement('div');
+        imagesDiv.className = 'info-popup-images';
+        imagesDiv.id = 'popup-images';
+        renderPopupImages(hotspot.images, imagesDiv);
+        popup.appendChild(imagesDiv);
+      }
+      
+      // Description
+      if (hotspot.description) {
+        const content = document.createElement('div');
+        content.className = 'info-popup-content';
+        content.innerHTML = '<p>' + hotspot.description + '</p>';
+        popup.appendChild(content);
+      }
+      
+      // Empty state
+      if (!hotspot.description && (!hotspot.images || hotspot.images.length === 0)) {
+        const empty = document.createElement('div');
+        empty.className = 'info-popup-empty';
+        empty.textContent = 'Нет дополнительной информации';
+        popup.appendChild(empty);
+      }
+      
+      // Position
+      popup.style.left = Math.min(x, window.innerWidth - 360) + 'px';
+      popup.style.top = Math.min(y, window.innerHeight - 300) + 'px';
+      popup.classList.remove('hidden');
+      
+      // Store hotspot for image navigation
+      popup.dataset.hotspotId = hotspot.id;
+    }
+    
+    function renderPopupImages(images, container) {
+      container.innerHTML = '<img src="' + images[popupImageIndex].url + '" alt="">';
+      if (images.length > 1) {
+        container.innerHTML += '<button class="info-popup-nav prev" onclick="prevImage(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>' +
+          '<button class="info-popup-nav next" onclick="nextImage(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>' +
+          '<div class="info-popup-dots">' + images.map((_, i) => '<div class="info-popup-dot' + (i === popupImageIndex ? ' active' : '') + '"></div>').join('') + '</div>';
+      }
+    }
+    
+    function prevImage(e) {
+      e.stopPropagation();
+      const popup = document.getElementById('info-popup');
+      const hotspot = currentSceneData.hotspots.find(h => h.id === popup.dataset.hotspotId);
+      if (!hotspot || !hotspot.images) return;
+      popupImageIndex = popupImageIndex > 0 ? popupImageIndex - 1 : hotspot.images.length - 1;
+      renderPopupImages(hotspot.images, document.getElementById('popup-images'));
+    }
+    
+    function nextImage(e) {
+      e.stopPropagation();
+      const popup = document.getElementById('info-popup');
+      const hotspot = currentSceneData.hotspots.find(h => h.id === popup.dataset.hotspotId);
+      if (!hotspot || !hotspot.images) return;
+      popupImageIndex = popupImageIndex < hotspot.images.length - 1 ? popupImageIndex + 1 : 0;
+      renderPopupImages(hotspot.images, document.getElementById('popup-images'));
+    }
+    
+    function closeInfoPopup() {
+      document.getElementById('info-popup').classList.add('hidden');
+    }
+    
+    // Close popup on viewer click
+    document.getElementById('viewer').addEventListener('click', closeInfoPopup);
+    
+    init();
+  </script>
+</body>
+</html>
