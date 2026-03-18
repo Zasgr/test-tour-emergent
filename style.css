@@ -243,3 +243,54 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
   color: rgba(255,255,255,0.5);
   font-size: 13px;
 }
+
+.minimap {
+  position: absolute;
+  bottom: 80px;
+  left: 20px;
+  width: 200px;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+  z-index: 20;
+}
+.minimap.hidden { display: none; }
+.minimap-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+}
+.minimap-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.minimap-image #minimap-points {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.minimap-point {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: #3b82f6;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.minimap-point:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+}
+.minimap-point.active {
+  background: #f97316;
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.3);
+}

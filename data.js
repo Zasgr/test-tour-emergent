@@ -1,9 +1,9 @@
 var APP_DATA = {
   "scenes": [
     {
-      "id": "1773798052774-99pjlgc2l",
-      "name": "2",
-      "imageUrl": "img/1773798052774-99pjlgc2l.jpg",
+      "id": "1773798883707-p1rddw7s6",
+      "name": "1",
+      "imageUrl": "img/1773798883707-p1rddw7s6.jpg",
       "initialView": {
         "yaw": 0,
         "pitch": 0,
@@ -11,29 +11,57 @@ var APP_DATA = {
       },
       "hotspots": [
         {
-          "id": "1773798095131-vs3uxhngv",
+          "id": "1773798996575-4sa81jqt3",
+          "icon": "arrowUp",
+          "size": 40,
+          "rotation": 0,
+          "opacity": 1,
+          "positionType": "floor",
+          "description": "",
+          "images": [],
+          "type": "transition",
+          "yaw": -0.3823205660622868,
+          "pitch": 0.7061195768638129,
+          "text": "",
+          "targetSceneId": "1773798898112-n1wytrfm9",
+          "color": "#f97316"
+        }
+      ]
+    },
+    {
+      "id": "1773798898112-n1wytrfm9",
+      "name": "2",
+      "imageUrl": "img/1773798898112-n1wytrfm9.jpg",
+      "initialView": {
+        "yaw": 0,
+        "pitch": 0,
+        "fov": 1.5707963267948966
+      },
+      "hotspots": [
+        {
+          "id": "1773798910120-lyjh9uue2",
           "icon": "infoFilled",
           "size": 40,
           "rotation": 0,
           "opacity": 1,
           "positionType": "embedded",
-          "description": "Эт я сделал\nДаДаДа\n))))))))))))",
+          "description": "ПМРОИДЛТЖ\nьлыльс\n\"0983",
           "images": [
             {
-              "url": "img/hotspot_1773798095131-vs3uxhngv_0.jpg",
+              "url": "img/hotspot_1773798910120-lyjh9uue2_0.jpg",
               "file": {},
               "caption": ""
             }
           ],
           "type": "info",
-          "yaw": -0.5091090842307775,
-          "pitch": 0.5557256786102638,
-          "text": "Баночка",
+          "yaw": -0.15394465843732874,
+          "pitch": 0,
+          "text": "Банка",
           "targetSceneId": null,
           "color": "#3b82f6"
         },
         {
-          "id": "1773798148758-taaxapoag",
+          "id": "1773798943947-wpi0ni6jo",
           "icon": "arrowUp",
           "size": 40,
           "rotation": 0,
@@ -42,82 +70,10 @@ var APP_DATA = {
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": 0.5350140988364895,
-          "pitch": 0.45517936638026235,
+          "yaw": 0.7158829532203637,
+          "pitch": 0.7180685649915759,
           "text": "",
-          "targetSceneId": "1773798075523-0d2kit0ub",
-          "color": "#f97316"
-        }
-      ]
-    },
-    {
-      "id": "1773798075523-0d2kit0ub",
-      "name": "1",
-      "imageUrl": "img/1773798075523-0d2kit0ub.jpg",
-      "initialView": {
-        "yaw": 0,
-        "pitch": 0,
-        "fov": 1.5707963267948966
-      },
-      "hotspots": [
-        {
-          "id": "1773798173197-cd7mlcxqw",
-          "icon": "arrowUp",
-          "size": 40,
-          "rotation": 0,
-          "opacity": 1,
-          "positionType": "floor",
-          "description": "",
-          "images": [],
-          "type": "transition",
-          "yaw": 0.20195038835031376,
-          "pitch": 0.47404389768698074,
-          "text": "",
-          "targetSceneId": "1773798052774-99pjlgc2l",
-          "color": "#f97316"
-        },
-        {
-          "id": "1773798204970-mdhdy1fnl",
-          "icon": "arrowUp",
-          "size": 40,
-          "rotation": 0,
-          "opacity": 1,
-          "positionType": "floor",
-          "description": "",
-          "images": [],
-          "type": "transition",
-          "yaw": 2.3877600586911587,
-          "pitch": 0.511907791282761,
-          "text": "",
-          "targetSceneId": "1773798091627-yt1es676v",
-          "color": "#f97316"
-        }
-      ]
-    },
-    {
-      "id": "1773798091627-yt1es676v",
-      "name": "3",
-      "imageUrl": "img/1773798091627-yt1es676v.jpg",
-      "initialView": {
-        "yaw": 0,
-        "pitch": 0,
-        "fov": 1.5707963267948966
-      },
-      "hotspots": [
-        {
-          "id": "1773798249238-8tpxx8414",
-          "icon": "arrowUp",
-          "size": 40,
-          "rotation": 0,
-          "opacity": 1,
-          "positionType": "floor",
-          "description": "",
-          "images": [],
-          "type": "transition",
-          "yaw": -0.5058166508295798,
-          "pitch": 0.3638725501663629,
-          "text": "",
-          "targetSceneId": "1773798075523-0d2kit0ub",
+          "targetSceneId": "1773798883707-p1rddw7s6",
           "color": "#f97316"
         }
       ]
@@ -133,14 +89,15 @@ var APP_DATA = {
   "markerStyle": {
     "textColor": "#ffffff",
     "backgroundColor": "#000000",
-    "backgroundOpacity": 0.75,
-    "borderWidth": 2,
-    "borderColor": "#000000",
+    "backgroundOpacity": 0.31,
+    "borderWidth": 1,
+    "borderColor": "#ffffff",
     "fontSize": 12
   },
-  "homeSceneId": "1773798075523-0d2kit0ub",
+  "homeSceneId": "1773798883707-p1rddw7s6",
   "autorotateSettings": {
     "enabled": true,
     "speed": 0.3
-  }
+  },
+  "minimap": null
 };

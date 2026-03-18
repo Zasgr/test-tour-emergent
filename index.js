@@ -2,11 +2,48 @@ const SCENES_DATA = APP_DATA.scenes;
 const MARKER_STYLE = APP_DATA.markerStyle;
 const HOME_SCENE_ID = APP_DATA.homeSceneId;
 const AUTOROTATE_SETTINGS = APP_DATA.autorotateSettings;
+const MINIMAP_DATA = APP_DATA.minimap;
 
 let viewer, currentScene, currentSceneData, hotspotsContainer, animationFrameId, currentSceneId;
 let popupImageIndex = 0;
 let autorotateEnabled = false;
 let autorotateAnimationId = null;
+
+// Initialize minimap
+function initMinimap() {
+  if (!MINIMAP_DATA || !MINIMAP_DATA.imageUrl) return;
+  
+  const minimap = document.getElementById('minimap');
+  minimap.classList.remove('hidden');
+  
+  const html = '<div class="minimap-image"><img src="' + MINIMAP_DATA.imageUrl + '" alt="Map"><div id="minimap-points"></div></div>';
+  minimap.innerHTML = html;
+  
+  updateMinimapPoints();
+}
+
+function updateMinimapPoints() {
+  if (!MINIMAP_DATA || !MINIMAP_DATA.points) return;
+  
+  const container = document.getElementById('minimap-points');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  MINIMAP_DATA.points.forEach(point => {
+    const scene = SCENES_DATA.find(s => s.id === point.sceneId);
+    if (!scene) return;
+    
+    const dot = document.createElement('div');
+    dot.className = 'minimap-point' + (currentSceneId === point.sceneId ? ' active' : '');
+    dot.style.left = point.x + '%';
+    dot.style.top = point.y + '%';
+    dot.title = scene.name;
+    dot.onclick = () => load(point.sceneId);
+    
+    container.appendChild(dot);
+  });
+}
 
 // Icon SVGs
 const ICONS = {
@@ -33,6 +70,7 @@ function init() {
   document.getElementById('viewer').appendChild(hotspotsContainer);
   
   renderThumbnails();
+  initMinimap();
   if (SCENES_DATA.length > 0) {
     loadScene(HOME_SCENE_ID || SCENES_DATA[0].id);
   }
@@ -92,6 +130,8 @@ function loadScene(sceneId) {
   document.querySelectorAll('.thumbnail').forEach(t => {
     t.classList.toggle('active', t.dataset.sceneId === sceneId);
   });
+  
+  updateMinimapPoints();
   
   renderHotspots(sceneData);
 }
