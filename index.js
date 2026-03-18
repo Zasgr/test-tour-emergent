@@ -77,7 +77,7 @@ function loadScene(sceneId) {
   });
   
   document.getElementById('scene-name').textContent = sceneData.name;
-  document.getElementById('scene-info').textContent = (sceneData.hotspots.length || 0) + ' меток';
+  document.getElementById('scene-info').textContent = '';
   
   var homeBtn = document.getElementById('home-btn');
   if (HOME_SCENE_ID && HOME_SCENE_ID !== sceneId) {

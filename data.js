@@ -25,8 +25,8 @@ var APP_DATA = {
         {
           "id": "1773785004391-5ypk21ovg",
           "type": "transition",
-          "yaw": 2.390832781794918,
-          "pitch": 0.4839250784650879,
+          "yaw": 2.354510173529796,
+          "pitch": 0.48928693109682264,
           "text": "",
           "targetSceneId": "1773784997909-bh68nlyqe",
           "color": "#f97316",
@@ -102,8 +102,8 @@ var APP_DATA = {
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": -0.48412253887359036,
-          "pitch": 0.3859248961941901,
+          "yaw": -0.5123894603107377,
+          "pitch": 0.3822092121800047,
           "text": "",
           "targetSceneId": "1773784874280-b81m24vdc",
           "color": "#f97316"
