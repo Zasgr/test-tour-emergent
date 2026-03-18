@@ -1,91 +1,9 @@
 var APP_DATA = {
   "scenes": [
     {
-      "id": "1773784874280-b81m24vdc",
-      "name": "1",
-      "imageUrl": "img/1773784874280-b81m24vdc.jpg",
-      "initialView": {
-        "yaw": 0.8653911708950286,
-        "pitch": 0.020312021467177033,
-        "fov": 1.5707963267948966
-      },
-      "hotspots": [
-        {
-          "id": "1773784890782-gv9bl54h3",
-          "type": "transition",
-          "yaw": 0.21876213897880348,
-          "pitch": 0.513159943436893,
-          "text": "",
-          "targetSceneId": "1773784886113-jyfakma1l",
-          "color": "#f97316",
-          "images": [],
-          "positionType": "floor",
-          "icon": "arrowUp"
-        },
-        {
-          "id": "1773785004391-5ypk21ovg",
-          "type": "transition",
-          "yaw": 2.390832781794918,
-          "pitch": 0.4839250784650879,
-          "text": "",
-          "targetSceneId": "1773784997909-bh68nlyqe",
-          "color": "#f97316",
-          "images": [],
-          "icon": "arrowUp",
-          "positionType": "floor"
-        }
-      ]
-    },
-    {
-      "id": "1773784886113-jyfakma1l",
+      "id": "1773798052774-99pjlgc2l",
       "name": "2",
-      "imageUrl": "img/1773784886113-jyfakma1l.jpg",
-      "initialView": {
-        "yaw": -0.029256363955813214,
-        "pitch": 0.062628732857128,
-        "fov": 1.5707963267948966
-      },
-      "hotspots": [
-        {
-          "id": "1773784907623-92ew4zh4n",
-          "type": "transition",
-          "yaw": 0.5172873632480055,
-          "pitch": 0.4440945440492836,
-          "text": "",
-          "targetSceneId": "1773784874280-b81m24vdc",
-          "color": "#f97316",
-          "images": [],
-          "icon": "arrowUp",
-          "positionType": "floor"
-        },
-        {
-          "id": "1773791404736-wr8y1ejyp",
-          "icon": "infoFilled",
-          "size": 40,
-          "rotation": 0,
-          "opacity": 1,
-          "positionType": "embedded",
-          "description": "Бутылка",
-          "images": [
-            {
-              "url": "img/hotspot_1773791404736-wr8y1ejyp_0.jpg",
-              "file": {},
-              "caption": ""
-            }
-          ],
-          "type": "info",
-          "yaw": -0.5261952987897729,
-          "pitch": 0.5298209484322953,
-          "text": "Стол",
-          "targetSceneId": null,
-          "color": "#3b82f6"
-        }
-      ]
-    },
-    {
-      "id": "1773784997909-bh68nlyqe",
-      "name": "3",
-      "imageUrl": "img/1773784997909-bh68nlyqe.jpg",
+      "imageUrl": "img/1773798052774-99pjlgc2l.jpg",
       "initialView": {
         "yaw": 0,
         "pitch": 0,
@@ -93,7 +11,29 @@ var APP_DATA = {
       },
       "hotspots": [
         {
-          "id": "1773791332833-hxryrjn88",
+          "id": "1773798095131-vs3uxhngv",
+          "icon": "infoFilled",
+          "size": 40,
+          "rotation": 0,
+          "opacity": 1,
+          "positionType": "embedded",
+          "description": "Эт я сделал\nДаДаДа\n))))))))))))",
+          "images": [
+            {
+              "url": "img/hotspot_1773798095131-vs3uxhngv_0.jpg",
+              "file": {},
+              "caption": ""
+            }
+          ],
+          "type": "info",
+          "yaw": -0.5091090842307775,
+          "pitch": 0.5557256786102638,
+          "text": "Баночка",
+          "targetSceneId": null,
+          "color": "#3b82f6"
+        },
+        {
+          "id": "1773798148758-taaxapoag",
           "icon": "arrowUp",
           "size": 40,
           "rotation": 0,
@@ -102,10 +42,82 @@ var APP_DATA = {
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": -0.48412253887359036,
-          "pitch": 0.3859248961941901,
+          "yaw": 0.5350140988364895,
+          "pitch": 0.45517936638026235,
           "text": "",
-          "targetSceneId": "1773784874280-b81m24vdc",
+          "targetSceneId": "1773798075523-0d2kit0ub",
+          "color": "#f97316"
+        }
+      ]
+    },
+    {
+      "id": "1773798075523-0d2kit0ub",
+      "name": "1",
+      "imageUrl": "img/1773798075523-0d2kit0ub.jpg",
+      "initialView": {
+        "yaw": 0,
+        "pitch": 0,
+        "fov": 1.5707963267948966
+      },
+      "hotspots": [
+        {
+          "id": "1773798173197-cd7mlcxqw",
+          "icon": "arrowUp",
+          "size": 40,
+          "rotation": 0,
+          "opacity": 1,
+          "positionType": "floor",
+          "description": "",
+          "images": [],
+          "type": "transition",
+          "yaw": 0.20195038835031376,
+          "pitch": 0.47404389768698074,
+          "text": "",
+          "targetSceneId": "1773798052774-99pjlgc2l",
+          "color": "#f97316"
+        },
+        {
+          "id": "1773798204970-mdhdy1fnl",
+          "icon": "arrowUp",
+          "size": 40,
+          "rotation": 0,
+          "opacity": 1,
+          "positionType": "floor",
+          "description": "",
+          "images": [],
+          "type": "transition",
+          "yaw": 2.3877600586911587,
+          "pitch": 0.511907791282761,
+          "text": "",
+          "targetSceneId": "1773798091627-yt1es676v",
+          "color": "#f97316"
+        }
+      ]
+    },
+    {
+      "id": "1773798091627-yt1es676v",
+      "name": "3",
+      "imageUrl": "img/1773798091627-yt1es676v.jpg",
+      "initialView": {
+        "yaw": 0,
+        "pitch": 0,
+        "fov": 1.5707963267948966
+      },
+      "hotspots": [
+        {
+          "id": "1773798249238-8tpxx8414",
+          "icon": "arrowUp",
+          "size": 40,
+          "rotation": 0,
+          "opacity": 1,
+          "positionType": "floor",
+          "description": "",
+          "images": [],
+          "type": "transition",
+          "yaw": -0.5058166508295798,
+          "pitch": 0.3638725501663629,
+          "text": "",
+          "targetSceneId": "1773798075523-0d2kit0ub",
           "color": "#f97316"
         }
       ]
@@ -121,11 +133,12 @@ var APP_DATA = {
   "markerStyle": {
     "textColor": "#ffffff",
     "backgroundColor": "#000000",
-    "backgroundOpacity": 0.19,
+    "backgroundOpacity": 0.75,
     "borderWidth": 2,
-    "borderColor": "#000000"
+    "borderColor": "#000000",
+    "fontSize": 12
   },
-  "homeSceneId": "1773784874280-b81m24vdc",
+  "homeSceneId": "1773798075523-0d2kit0ub",
   "autorotateSettings": {
     "enabled": true,
     "speed": 0.3
