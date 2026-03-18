@@ -1,9 +1,12 @@
 const SCENES_DATA = APP_DATA.scenes;
 const MARKER_STYLE = APP_DATA.markerStyle;
 const HOME_SCENE_ID = APP_DATA.homeSceneId;
+const AUTOROTATE_SETTINGS = APP_DATA.autorotateSettings;
 
 let viewer, currentScene, currentSceneData, hotspotsContainer, animationFrameId, currentSceneId;
 let popupImageIndex = 0;
+let autorotateEnabled = false;
+let autorotateAnimationId = null;
 
 // Icon SVGs
 const ICONS = {
@@ -231,6 +234,46 @@ function nextImage(e) {
 
 function closeInfoPopup() {
   document.getElementById('info-popup').classList.add('hidden');
+}
+
+function toggleAutorotate() {
+  autorotateEnabled = !autorotateEnabled;
+  const btn = document.getElementById('autorotate-btn');
+  if (autorotateEnabled) {
+    btn.classList.add('active');
+    startAutorotate();
+  } else {
+    btn.classList.remove('active');
+    stopAutorotate();
+  }
+}
+
+function startAutorotate() {
+  if (!currentScene || autorotateAnimationId) return;
+  const baseSpeed = 0.0001;
+  const speed = baseSpeed * (AUTOROTATE_SETTINGS.speed || 0.3);
+  let lastTime = Date.now();
+  
+  function rotate() {
+    const now = Date.now();
+    const delta = now - lastTime;
+    lastTime = now;
+    
+    const view = currentScene.view();
+    const yaw = view.yaw();
+    view.setYaw(yaw + (speed * delta));
+    
+    autorotateAnimationId = requestAnimationFrame(rotate);
+  }
+  
+  autorotateAnimationId = requestAnimationFrame(rotate);
+}
+
+function stopAutorotate() {
+  if (autorotateAnimationId) {
+    cancelAnimationFrame(autorotateAnimationId);
+    autorotateAnimationId = null;
+  }
 }
 
 document.getElementById('viewer').addEventListener('click', closeInfoPopup);

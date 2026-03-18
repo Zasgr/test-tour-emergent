@@ -73,6 +73,37 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; font
 .home-btn:hover { background: rgba(0,0,0,0.9); }
 .home-btn.hidden { display: none; }
 
+.autorotate-btn {
+  position: absolute;
+  top: 16px;
+  right: 68px;
+  width: 44px;
+  height: 44px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.2s;
+}
+.autorotate-btn:hover { background: rgba(0,0,0,0.9); }
+.autorotate-btn.active { 
+  background: rgba(249, 115, 22, 0.9);
+  color: white;
+}
+.autorotate-btn.active svg {
+  animation: spin 3s linear infinite;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .thumbnail-gallery {
   position: absolute;
   bottom: 16px;

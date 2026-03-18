@@ -125,5 +125,9 @@ var APP_DATA = {
     "borderWidth": 2,
     "borderColor": "#000000"
   },
-  "homeSceneId": "1773784874280-b81m24vdc"
+  "homeSceneId": "1773784874280-b81m24vdc",
+  "autorotateSettings": {
+    "enabled": true,
+    "speed": 0.3
+  }
 };
