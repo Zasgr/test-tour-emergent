@@ -1,17 +1,17 @@
 var APP_DATA = {
   "scenes": [
     {
-      "id": "1774131048319-splifiy6v",
+      "id": "1774132111864-8r5a0fw2l",
       "name": "1",
-      "imageUrl": "img/1774131048319-splifiy6v.jpg",
+      "imageUrl": "img/1774132111864-8r5a0fw2l.jpg",
       "initialView": {
-        "yaw": 3.101965240278475,
-        "pitch": 0.26329359247677075,
+        "yaw": -2.9473952843965012,
+        "pitch": 0.31108782776762567,
         "fov": 1.5707963267948966
       },
       "hotspots": [
         {
-          "id": "1774131092228-gasjqqasb",
+          "id": "1774132130072-c5dy3nd4a",
           "icon": "arrowUp",
           "size": 40,
           "rotation": 0,
@@ -20,61 +20,61 @@ var APP_DATA = {
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": 3.0936330482659926,
-          "pitch": 0.8928413905382975,
+          "yaw": -3.1286788395294085,
+          "pitch": 0.6003469109214912,
           "text": "",
-          "targetSceneId": "1774131062685-uoqyta6uc",
+          "targetSceneId": "1774132159308-u0mu7972q",
           "color": "#f97316"
-        },
+        }
+      ]
+    },
+    {
+      "id": "1774132159308-u0mu7972q",
+      "name": "2",
+      "imageUrl": "img/1774132159308-u0mu7972q.jpg",
+      "initialView": {
+        "yaw": 0,
+        "pitch": 0,
+        "fov": 1.5707963267948966
+      },
+      "hotspots": [
         {
-          "id": "1774131138344-3sx65f7jg",
-          "icon": "infoFilled",
+          "id": "1774132173856-rxy2n8av4",
+          "icon": "arrowUp",
           "size": 40,
           "rotation": 0,
           "opacity": 1,
-          "positionType": "wall",
+          "positionType": "floor",
+          "description": "",
+          "images": [],
+          "type": "transition",
+          "yaw": -1.7410126356900815,
+          "pitch": 0.5307736710245354,
+          "text": "",
+          "targetSceneId": "1774132111864-8r5a0fw2l",
+          "color": "#f97316"
+        },
+        {
+          "id": "1774132184166-d7fcg2mgt",
+          "icon": "infoFilled",
+          "size": 66,
+          "rotation": 0,
+          "opacity": 1,
+          "positionType": "embedded",
           "description": "",
           "images": [
             {
-              "url": "img/hotspot_1774131138344-3sx65f7jg_0.jpg",
+              "url": "img/hotspot_1774132184166-d7fcg2mgt_0.jpg",
               "file": {},
               "caption": ""
             }
           ],
           "type": "info",
-          "yaw": -3.095960033202438,
-          "pitch": 0.3863767077393234,
+          "yaw": -2.337429274613889,
+          "pitch": 0.2399596384622651,
           "text": "Новая метка",
           "targetSceneId": null,
-          "color": "#3b82f6"
-        }
-      ]
-    },
-    {
-      "id": "1774131062685-uoqyta6uc",
-      "name": "2",
-      "imageUrl": "img/1774131062685-uoqyta6uc.jpg",
-      "initialView": {
-        "yaw": 3.113299965968622,
-        "pitch": 0.3357547808937511,
-        "fov": 1.5707963267948966
-      },
-      "hotspots": [
-        {
-          "id": "1774131078030-rl72fhzcr",
-          "icon": "arrowUp",
-          "size": 40,
-          "rotation": 0,
-          "opacity": 1,
-          "positionType": "floor",
-          "description": "",
-          "images": [],
-          "type": "transition",
-          "yaw": -3.1259964878380124,
-          "pitch": 0.8985205264166485,
-          "text": "",
-          "targetSceneId": "1774131048319-splifiy6v",
-          "color": "#f97316"
+          "color": "#211a17"
         }
       ]
     }
@@ -87,16 +87,16 @@ var APP_DATA = {
     "viewControlButtons": true
   },
   "markerStyle": {
-    "textColor": "#ffffff",
-    "backgroundColor": "#000000",
-    "backgroundOpacity": 0.75,
-    "borderWidth": 2,
-    "borderColor": "#000000",
+    "textColor": "#e0e0e0",
+    "backgroundColor": "#ffffff",
+    "backgroundOpacity": 0,
+    "borderWidth": 1,
+    "borderColor": "#454545",
     "fontSize": 12
   },
-  "homeSceneId": "1774131062685-uoqyta6uc",
+  "homeSceneId": "1774132111864-8r5a0fw2l",
   "autorotateSettings": {
     "enabled": true,
-    "speed": 0.3
+    "speed": 0.7
   }
 };

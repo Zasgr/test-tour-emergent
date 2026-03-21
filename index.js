@@ -68,25 +68,74 @@ function loadScene(sceneId) {
   currentSceneData = sceneData;
   currentSceneId = sceneId;
   
-  // Detect max texture size for device (critical for mobile/Android)
+  // Detect device and texture limitations
   var canvas = document.createElement('canvas');
   var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-  var maxTextureSize = gl ? gl.getParameter(gl.MAX_TEXTURE_SIZE) : 2048;
+  var maxTextureSize = 2048; // Default safe value
   
-  // Use conservative size for mobile devices to avoid black screen
-  var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  var maxSize = isMobile ? Math.min(maxTextureSize, 2048) : Math.min(maxTextureSize, 4096);
+  if (gl) {
+    try {
+      maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+    } catch(e) {
+      console.warn('Could not detect MAX_TEXTURE_SIZE:', e);
+    }
+  }
   
-  var levels = [{ width: maxSize }];
-  var source = Marzipano.ImageUrlSource.fromString(sceneData.imageUrl);
-  var geometry = new Marzipano.EquirectGeometry(levels);
-  var limiter = Marzipano.RectilinearView.limit.traditional(maxSize, 100*Math.PI/180, 120*Math.PI/180);
+  // Very conservative settings for Android
+  var isAndroid = /Android/i.test(navigator.userAgent);
+  var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  
+  var maxSize;
+  if (isAndroid) {
+    // Android: use very conservative 1024 to avoid black screen
+    maxSize = Math.min(maxTextureSize, 1024);
+  } else if (isIOS) {
+    maxSize = Math.min(maxTextureSize, 2048);
+  } else {
+    maxSize = Math.min(maxTextureSize, 4096);
+  }
+  
+  // Create source with specific settings for mobile
+  var source = Marzipano.ImageUrlSource.fromString(sceneData.imageUrl, {
+    cubeMapPreviewUrl: sceneData.imageUrl
+  });
+  
+  var geometry = new Marzipano.EquirectGeometry([{ 
+    width: maxSize,
+    tileSize: isAndroid ? 512 : 1024
+  }]);
+  
+  var limiter = Marzipano.RectilinearView.limit.traditional(
+    maxSize, 
+    100 * Math.PI / 180, 
+    120 * Math.PI / 180
+  );
+  
   var view = new Marzipano.RectilinearView(sceneData.initialView, limiter);
   
-  currentScene = viewer.createScene({ source: source, geometry: geometry, view: view, pinFirstLevel: true });
-  currentScene.switchTo({}, function() {
+  try {
+    currentScene = viewer.createScene({ 
+      source: source, 
+      geometry: geometry, 
+      view: view, 
+      pinFirstLevel: true 
+    });
+    
+    currentScene.switchTo({}, function() {
+      document.getElementById('loading').classList.add('hidden');
+    });
+  } catch(error) {
+    console.error('Error creating scene:', error);
+    console.log('Device info:', {
+      userAgent: navigator.userAgent,
+      isAndroid: isAndroid,
+      maxTextureSize: maxTextureSize,
+      usedSize: maxSize,
+      tileSize: isAndroid ? 512 : 1024
+    });
     document.getElementById('loading').classList.add('hidden');
-  });
+    alert('Ошибка загрузки панорамы. Попробуйте обновить страницу.');
+  }
   
   document.getElementById('scene-name').textContent = sceneData.name;
   document.getElementById('scene-info').textContent = '';
