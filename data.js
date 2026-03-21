@@ -1,9 +1,9 @@
 var APP_DATA = {
   "scenes": [
     {
-      "id": "1774124773732-5ywo4tcbe",
+      "id": "1774129331152-ngrxt7kmp",
       "name": "1",
-      "imageUrl": "img/1774124773732-5ywo4tcbe.jpg",
+      "imageUrl": "img/1774129331152-ngrxt7kmp.jpg",
       "initialView": {
         "yaw": 0,
         "pitch": 0,
@@ -11,7 +11,7 @@ var APP_DATA = {
       },
       "hotspots": [
         {
-          "id": "1774124790247-zjn5oj8nr",
+          "id": "1774129348755-mnfe6a7hv",
           "icon": "arrowUp",
           "size": 40,
           "rotation": 0,
@@ -20,48 +20,48 @@ var APP_DATA = {
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": -0.42141918378362675,
-          "pitch": 0.5431728500826924,
+          "yaw": -0.35423087941685516,
+          "pitch": 0.7131519055742537,
           "text": "",
-          "targetSceneId": "1774124785615-hlv23pbz6",
+          "targetSceneId": "1774129343593-riul9lwed",
           "color": "#f97316"
-        },
+        }
+      ]
+    },
+    {
+      "id": "1774129343593-riul9lwed",
+      "name": "2",
+      "imageUrl": "img/1774129343593-riul9lwed.jpg",
+      "initialView": {
+        "yaw": 0,
+        "pitch": 0,
+        "fov": 1.5707963267948966
+      },
+      "hotspots": [
         {
-          "id": "1774124956793-eabseryfh",
+          "id": "1774129369492-kkdq0leg8",
           "icon": "infoFilled",
           "size": 40,
           "rotation": 0,
           "opacity": 1,
           "positionType": "wall",
-          "description": "апролждэжэ\nлорплоа",
+          "description": "щзшгинрпемакгснувеннквге\nщдшлгзтнишпмеагв\nшщгзнщиемшскганучвыеяцнквге5а6шпн7щрг8",
           "images": [
             {
-              "url": "img/hotspot_1774124956793-eabseryfh_0.jpg",
+              "url": "img/hotspot_1774129369492-kkdq0leg8_0.jpg",
               "file": {},
               "caption": ""
             }
           ],
           "type": "info",
-          "yaw": 0.051794219937873365,
-          "pitch": 0.49588444329655346,
-          "text": "Бутылка",
+          "yaw": 0.1179839560541005,
+          "pitch": 0.055587603478270964,
+          "text": "Новая метка",
           "targetSceneId": null,
           "color": "#3b82f6"
-        }
-      ]
-    },
-    {
-      "id": "1774124785615-hlv23pbz6",
-      "name": "2",
-      "imageUrl": "img/1774124785615-hlv23pbz6.jpg",
-      "initialView": {
-        "yaw": 0,
-        "pitch": 0,
-        "fov": 1.5707963267948966
-      },
-      "hotspots": [
+        },
         {
-          "id": "1774124806602-l2gjh6h77",
+          "id": "1774129435645-bydu3gz11",
           "icon": "arrowUp",
           "size": 40,
           "rotation": 0,
@@ -70,10 +70,10 @@ var APP_DATA = {
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": 0.019394119005527344,
-          "pitch": 0.5829262012761909,
+          "yaw": 0.7967860371042814,
+          "pitch": 0.6752513769909392,
           "text": "",
-          "targetSceneId": "1774124773732-5ywo4tcbe",
+          "targetSceneId": "1774129331152-ngrxt7kmp",
           "color": "#f97316"
         }
       ]
@@ -89,32 +89,32 @@ var APP_DATA = {
   "markerStyle": {
     "textColor": "#ffffff",
     "backgroundColor": "#000000",
-    "backgroundOpacity": 0.16,
-    "borderWidth": 2,
-    "borderColor": "#000000",
+    "backgroundOpacity": 0.06,
+    "borderWidth": 1,
+    "borderColor": "#b0b0b0",
     "fontSize": 12
   },
-  "homeSceneId": "1774124773732-5ywo4tcbe",
+  "homeSceneId": "1774129331152-ngrxt7kmp",
   "autorotateSettings": {
     "enabled": true,
-    "speed": 0.6
+    "speed": 0.7
   },
   "minimap": {
     "imageUrl": "img/minimap.jpg",
     "points": [
       {
-        "sceneId": "1774124773732-5ywo4tcbe",
-        "x": 53.02013422818792,
-        "y": 23.624161073825505
+        "sceneId": "1774129331152-ngrxt7kmp",
+        "x": 52.348993288590606,
+        "y": 22.01342281879195
       },
       {
-        "sceneId": "1774124785615-hlv23pbz6",
-        "x": 50,
+        "sceneId": "1774129343593-riul9lwed",
+        "x": 51.006711409395976,
         "y": 74.63087248322148
       }
     ],
-    "size": 260,
-    "backgroundColor": "#bfb7a2",
+    "size": 300,
+    "backgroundColor": "#ffffff",
     "opacity": 0
   }
 };
