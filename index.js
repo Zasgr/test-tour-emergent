@@ -153,8 +153,14 @@ function renderHotspots(sceneData) {
     const rotation = hotspot.rotation || 0;
     const opacity = hotspot.opacity !== undefined ? hotspot.opacity : 1;
     const color = hotspot.color || (hotspot.type === 'info' ? '#3b82f6' : '#f97316');
+    const positionType = hotspot.positionType || 'embedded';
     
-    element.innerHTML = '<div class="hotspot-icon" style="width:' + size + 'px;height:' + size + 'px;background:' + color + ';opacity:' + opacity + ';transform:rotate(' + rotation + 'deg)">' + 
+    let iconTransform = 'rotate(' + rotation + 'deg)';
+    if (positionType === 'floor') {
+      iconTransform = 'rotate(' + rotation + 'deg) rotateX(60deg)';
+    }
+    
+    element.innerHTML = '<div class="hotspot-icon" style="width:' + size + 'px;height:' + size + 'px;background:' + color + ';opacity:' + opacity + ';transform:' + iconTransform + '">' + 
       '<div style="width:50%;height:50%;color:white">' + getIcon(hotspot.icon || (hotspot.type === 'info' ? 'info' : 'arrowRight')) + '</div>' +
       '</div>';
     

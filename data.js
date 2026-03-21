@@ -20,8 +20,8 @@ var APP_DATA = {
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": -0.42141918378362675,
-          "pitch": 0.5431728500826924,
+          "yaw": -0.4416245443170048,
+          "pitch": 0.5095950502904785,
           "text": "",
           "targetSceneId": "1774124785615-hlv23pbz6",
           "color": "#f97316"
@@ -99,5 +99,22 @@ var APP_DATA = {
     "enabled": true,
     "speed": 0.6
   },
-  "minimap": null
+  "minimap": {
+    "imageUrl": "img/minimap.jpg",
+    "points": [
+      {
+        "sceneId": "1774124773732-5ywo4tcbe",
+        "x": 53.02013422818792,
+        "y": 23.624161073825505
+      },
+      {
+        "sceneId": "1774124785615-hlv23pbz6",
+        "x": 50,
+        "y": 74.63087248322148
+      }
+    ],
+    "size": 280,
+    "backgroundColor": "#bfb7a2",
+    "opacity": 0
+  }
 };
