@@ -20,8 +20,8 @@ var APP_DATA = {
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": -0.4416245443170048,
-          "pitch": 0.5095950502904785,
+          "yaw": -0.42141918378362675,
+          "pitch": 0.5431728500826924,
           "text": "",
           "targetSceneId": "1774124785615-hlv23pbz6",
           "color": "#f97316"
@@ -113,7 +113,7 @@ var APP_DATA = {
         "y": 74.63087248322148
       }
     ],
-    "size": 280,
+    "size": 260,
     "backgroundColor": "#bfb7a2",
     "opacity": 0
   }
