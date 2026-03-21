@@ -96,7 +96,7 @@ var APP_DATA = {
   },
   "homeSceneId": "1774124773732-5ywo4tcbe",
   "autorotateSettings": {
-    "enabled": true,
+    "enabled": false,
     "speed": 0.6
   },
   "minimap": {
@@ -104,13 +104,13 @@ var APP_DATA = {
     "points": [
       {
         "sceneId": "1774124773732-5ywo4tcbe",
-        "x": 53.02013422818792,
-        "y": 23.624161073825505
+        "x": 49.224806201550386,
+        "y": 19.844961240310077
       },
       {
         "sceneId": "1774124785615-hlv23pbz6",
-        "x": 50,
-        "y": 74.63087248322148
+        "x": 53.875968992248055,
+        "y": 75.03875968992249
       }
     ],
     "size": 260,
