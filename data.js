@@ -1,9 +1,9 @@
 var APP_DATA = {
   "scenes": [
     {
-      "id": "1773798883707-p1rddw7s6",
+      "id": "1774124773732-5ywo4tcbe",
       "name": "1",
-      "imageUrl": "img/1773798883707-p1rddw7s6.jpg",
+      "imageUrl": "img/1774124773732-5ywo4tcbe.jpg",
       "initialView": {
         "yaw": 0,
         "pitch": 0,
@@ -11,7 +11,7 @@ var APP_DATA = {
       },
       "hotspots": [
         {
-          "id": "1773798996575-4sa81jqt3",
+          "id": "1774124790247-zjn5oj8nr",
           "icon": "arrowUp",
           "size": 40,
           "rotation": 0,
@@ -20,48 +20,48 @@ var APP_DATA = {
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": -0.3823205660622868,
-          "pitch": 0.7061195768638129,
+          "yaw": -0.42141918378362675,
+          "pitch": 0.5431728500826924,
           "text": "",
-          "targetSceneId": "1773798898112-n1wytrfm9",
+          "targetSceneId": "1774124785615-hlv23pbz6",
           "color": "#f97316"
-        }
-      ]
-    },
-    {
-      "id": "1773798898112-n1wytrfm9",
-      "name": "2",
-      "imageUrl": "img/1773798898112-n1wytrfm9.jpg",
-      "initialView": {
-        "yaw": 0,
-        "pitch": 0,
-        "fov": 1.5707963267948966
-      },
-      "hotspots": [
+        },
         {
-          "id": "1773798910120-lyjh9uue2",
+          "id": "1774124956793-eabseryfh",
           "icon": "infoFilled",
           "size": 40,
           "rotation": 0,
           "opacity": 1,
-          "positionType": "embedded",
-          "description": "ПМРОИДЛТЖ\nьлыльс\n\"0983",
+          "positionType": "wall",
+          "description": "апролждэжэ\nлорплоа",
           "images": [
             {
-              "url": "img/hotspot_1773798910120-lyjh9uue2_0.jpg",
+              "url": "img/hotspot_1774124956793-eabseryfh_0.jpg",
               "file": {},
               "caption": ""
             }
           ],
           "type": "info",
-          "yaw": -0.15394465843732874,
-          "pitch": 0,
-          "text": "Банка",
+          "yaw": 0.051794219937873365,
+          "pitch": 0.49588444329655346,
+          "text": "Бутылка",
           "targetSceneId": null,
           "color": "#3b82f6"
-        },
+        }
+      ]
+    },
+    {
+      "id": "1774124785615-hlv23pbz6",
+      "name": "2",
+      "imageUrl": "img/1774124785615-hlv23pbz6.jpg",
+      "initialView": {
+        "yaw": 0,
+        "pitch": 0,
+        "fov": 1.5707963267948966
+      },
+      "hotspots": [
         {
-          "id": "1773798943947-wpi0ni6jo",
+          "id": "1774124806602-l2gjh6h77",
           "icon": "arrowUp",
           "size": 40,
           "rotation": 0,
@@ -70,10 +70,10 @@ var APP_DATA = {
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": 0.7158829532203637,
-          "pitch": 0.7180685649915759,
+          "yaw": 0.019394119005527344,
+          "pitch": 0.5829262012761909,
           "text": "",
-          "targetSceneId": "1773798883707-p1rddw7s6",
+          "targetSceneId": "1774124773732-5ywo4tcbe",
           "color": "#f97316"
         }
       ]
@@ -89,15 +89,15 @@ var APP_DATA = {
   "markerStyle": {
     "textColor": "#ffffff",
     "backgroundColor": "#000000",
-    "backgroundOpacity": 0.31,
-    "borderWidth": 1,
-    "borderColor": "#ffffff",
+    "backgroundOpacity": 0.16,
+    "borderWidth": 2,
+    "borderColor": "#000000",
     "fontSize": 12
   },
-  "homeSceneId": "1773798883707-p1rddw7s6",
+  "homeSceneId": "1774124773732-5ywo4tcbe",
   "autorotateSettings": {
     "enabled": true,
-    "speed": 0.3
+    "speed": 0.6
   },
   "minimap": null
 };

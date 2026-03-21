@@ -316,6 +316,27 @@ function stopAutorotate() {
   }
 }
 
+function toggleFullscreen() {
+  const btn = document.getElementById('fullscreen-btn');
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+    btn.classList.add('active');
+  } else {
+    document.exitFullscreen();
+    btn.classList.remove('active');
+  }
+}
+
+// Listen for fullscreen changes
+document.addEventListener('fullscreenchange', function() {
+  const btn = document.getElementById('fullscreen-btn');
+  if (document.fullscreenElement) {
+    btn.classList.add('active');
+  } else {
+    btn.classList.remove('active');
+  }
+});
+
 document.getElementById('viewer').addEventListener('click', closeInfoPopup);
 
 init();
