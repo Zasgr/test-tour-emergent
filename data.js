@@ -1,17 +1,17 @@
 var APP_DATA = {
   "scenes": [
     {
-      "id": "1774129331152-ngrxt7kmp",
+      "id": "1774131048319-splifiy6v",
       "name": "1",
-      "imageUrl": "img/1774129331152-ngrxt7kmp.jpg",
+      "imageUrl": "img/1774131048319-splifiy6v.jpg",
       "initialView": {
-        "yaw": 0,
-        "pitch": 0,
+        "yaw": 3.101965240278475,
+        "pitch": 0.26329359247677075,
         "fov": 1.5707963267948966
       },
       "hotspots": [
         {
-          "id": "1774129348755-mnfe6a7hv",
+          "id": "1774131092228-gasjqqasb",
           "icon": "arrowUp",
           "size": 40,
           "rotation": 0,
@@ -20,48 +20,48 @@ var APP_DATA = {
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": -0.35423087941685516,
-          "pitch": 0.7131519055742537,
+          "yaw": 3.0936330482659926,
+          "pitch": 0.8928413905382975,
           "text": "",
-          "targetSceneId": "1774129343593-riul9lwed",
+          "targetSceneId": "1774131062685-uoqyta6uc",
           "color": "#f97316"
-        }
-      ]
-    },
-    {
-      "id": "1774129343593-riul9lwed",
-      "name": "2",
-      "imageUrl": "img/1774129343593-riul9lwed.jpg",
-      "initialView": {
-        "yaw": 0,
-        "pitch": 0,
-        "fov": 1.5707963267948966
-      },
-      "hotspots": [
+        },
         {
-          "id": "1774129369492-kkdq0leg8",
+          "id": "1774131138344-3sx65f7jg",
           "icon": "infoFilled",
           "size": 40,
           "rotation": 0,
           "opacity": 1,
           "positionType": "wall",
-          "description": "щзшгинрпемакгснувеннквге\nщдшлгзтнишпмеагв\nшщгзнщиемшскганучвыеяцнквге5а6шпн7щрг8",
+          "description": "",
           "images": [
             {
-              "url": "img/hotspot_1774129369492-kkdq0leg8_0.jpg",
+              "url": "img/hotspot_1774131138344-3sx65f7jg_0.jpg",
               "file": {},
               "caption": ""
             }
           ],
           "type": "info",
-          "yaw": 0.1179839560541005,
-          "pitch": 0.055587603478270964,
+          "yaw": -3.095960033202438,
+          "pitch": 0.3863767077393234,
           "text": "Новая метка",
           "targetSceneId": null,
           "color": "#3b82f6"
-        },
+        }
+      ]
+    },
+    {
+      "id": "1774131062685-uoqyta6uc",
+      "name": "2",
+      "imageUrl": "img/1774131062685-uoqyta6uc.jpg",
+      "initialView": {
+        "yaw": 3.113299965968622,
+        "pitch": 0.3357547808937511,
+        "fov": 1.5707963267948966
+      },
+      "hotspots": [
         {
-          "id": "1774129435645-bydu3gz11",
+          "id": "1774131078030-rl72fhzcr",
           "icon": "arrowUp",
           "size": 40,
           "rotation": 0,
@@ -70,10 +70,10 @@ var APP_DATA = {
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": 0.7967860371042814,
-          "pitch": 0.6752513769909392,
+          "yaw": -3.1259964878380124,
+          "pitch": 0.8985205264166485,
           "text": "",
-          "targetSceneId": "1774129331152-ngrxt7kmp",
+          "targetSceneId": "1774131048319-splifiy6v",
           "color": "#f97316"
         }
       ]
@@ -89,32 +89,14 @@ var APP_DATA = {
   "markerStyle": {
     "textColor": "#ffffff",
     "backgroundColor": "#000000",
-    "backgroundOpacity": 0.06,
-    "borderWidth": 1,
-    "borderColor": "#b0b0b0",
+    "backgroundOpacity": 0.75,
+    "borderWidth": 2,
+    "borderColor": "#000000",
     "fontSize": 12
   },
-  "homeSceneId": "1774129331152-ngrxt7kmp",
+  "homeSceneId": "1774131062685-uoqyta6uc",
   "autorotateSettings": {
     "enabled": true,
-    "speed": 0.7
-  },
-  "minimap": {
-    "imageUrl": "img/minimap.jpg",
-    "points": [
-      {
-        "sceneId": "1774129331152-ngrxt7kmp",
-        "x": 52.348993288590606,
-        "y": 22.01342281879195
-      },
-      {
-        "sceneId": "1774129343593-riul9lwed",
-        "x": 51.006711409395976,
-        "y": 74.63087248322148
-      }
-    ],
-    "size": 300,
-    "backgroundColor": "#ffffff",
-    "opacity": 0
+    "speed": 0.3
   }
 };

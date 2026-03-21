@@ -2,122 +2,11 @@ const SCENES_DATA = APP_DATA.scenes;
 const MARKER_STYLE = APP_DATA.markerStyle;
 const HOME_SCENE_ID = APP_DATA.homeSceneId;
 const AUTOROTATE_SETTINGS = APP_DATA.autorotateSettings;
-const MINIMAP_DATA = APP_DATA.minimap;
 
 let viewer, currentScene, currentSceneData, hotspotsContainer, animationFrameId, currentSceneId;
 let popupImageIndex = 0;
 let autorotateEnabled = false;
 let autorotateAnimationId = null;
-
-// Initialize minimap
-let minimapDragging = false;
-let minimapPosition = { x: 20, y: window.innerHeight - 280 };
-let minimapExpanded = false;
-let minimapHidden = true; // По умолчанию скрыта
-
-function initMinimap() {
-  if (!MINIMAP_DATA || !MINIMAP_DATA.imageUrl) return;
-  
-  const minimap = document.getElementById('minimap');
-  const toggleBtn = document.getElementById('minimap-toggle');
-  
-  minimap.classList.add('hidden'); // Скрыта по умолчанию
-  toggleBtn.classList.remove('hidden'); // Показать кнопку
-  
-  const size = MINIMAP_DATA.size || 200;
-  
-  const html = "<div class='minimap-header'>" +
-    "<div class='minimap-title'><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><rect x='3' y='3' width='7' height='7'/><rect x='14' y='3' width='7' height='7'/><rect x='14' y='14' width='7' height='7'/><rect x='3' y='14' width='7' height='7'/></svg><span>Карта</span></div>" +
-    "<div class='minimap-controls'>" +
-    "<button onclick='toggleMinimapSize(event)' title='Размер'><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3'/></svg></button>" +
-    "<button onclick='toggleMinimap()' title='Скрыть'><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg></button>" +
-    "</div></div>" +
-    "<div class='minimap-image'><img src='" + MINIMAP_DATA.imageUrl + "' alt='Map'><div id='minimap-points'></div></div>";
-  
-  minimap.innerHTML = html;
-  minimap.style.width = size + 'px';
-  
-  // Drag functionality
-  const header = minimap.querySelector('.minimap-header');
-  header.onmousedown = startMinimapDrag;
-  
-  updateMinimapPoints();
-}
-
-function startMinimapDrag(e) {
-  if (e.target.closest('.minimap-controls')) return;
-  minimapDragging = true;
-  const minimap = document.getElementById('minimap');
-  const rect = minimap.getBoundingClientRect();
-  const offsetX = e.clientX - rect.left;
-  const offsetY = e.clientY - rect.top;
-  
-  function onMouseMove(e) {
-    if (!minimapDragging) return;
-    minimapPosition.x = e.clientX - offsetX;
-    minimapPosition.y = e.clientY - offsetY;
-    minimap.style.left = minimapPosition.x + 'px';
-    minimap.style.top = minimapPosition.y + 'px';
-    minimap.style.bottom = 'auto';
-  }
-  
-  function onMouseUp() {
-    minimapDragging = false;
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
-  }
-  
-  document.addEventListener('mousemove', onMouseMove);
-  document.addEventListener('mouseup', onMouseUp);
-}
-
-function toggleMinimap() {
-  const minimap = document.getElementById('minimap');
-  const toggleBtn = document.getElementById('minimap-toggle');
-  minimapHidden = !minimapHidden;
-  if (minimapHidden) {
-    minimap.classList.add('hidden');
-    toggleBtn.classList.remove('hidden');
-  } else {
-    minimap.classList.remove('hidden');
-    toggleBtn.classList.add('hidden');
-  }
-}
-
-function toggleMinimapSize(e) {
-  e.stopPropagation();
-  const minimap = document.getElementById('minimap');
-  minimapExpanded = !minimapExpanded;
-  const baseSize = MINIMAP_DATA.size || 200;
-  const newSize = minimapExpanded ? baseSize * 1.5 : baseSize;
-  minimap.style.width = newSize + 'px';
-}
-
-function updateMinimapPoints() {
-  if (!MINIMAP_DATA || !MINIMAP_DATA.points) return;
-  
-  const container = document.getElementById('minimap-points');
-  if (!container) return;
-  
-  container.innerHTML = '';
-  
-  MINIMAP_DATA.points.forEach(point => {
-    const scene = SCENES_DATA.find(s => s.id === point.sceneId);
-    if (!scene) return;
-    
-    const dot = document.createElement('div');
-    dot.className = 'minimap-point' + (currentSceneId === point.sceneId ? ' active' : '');
-    dot.style.left = point.x + '%';
-    dot.style.top = point.y + '%';
-    dot.title = scene.name;
-    dot.onclick = function(e) {
-      e.stopPropagation();
-      loadScene(point.sceneId);
-    };
-    
-    container.appendChild(dot);
-  });
-}
 
 // Icon SVGs
 const ICONS = {
@@ -144,7 +33,6 @@ function init() {
   document.getElementById('viewer').appendChild(hotspotsContainer);
   
   renderThumbnails();
-  initMinimap();
   if (SCENES_DATA.length > 0) {
     loadScene(HOME_SCENE_ID || SCENES_DATA[0].id);
   }
@@ -180,42 +68,14 @@ function loadScene(sceneId) {
   currentSceneData = sceneData;
   currentSceneId = sceneId;
   
-  // Улучшенная конфигурация для мобильных устройств
-  var levels = [{ 
-    width: 4096,
-    tileSize: 512 // Меньший размер тайлов для мобильных
-  }];
-  
-  var source = Marzipano.ImageUrlSource.fromString(sceneData.imageUrl, {
-    cubeMapPreviewUrl: sceneData.imageUrl // Fallback для мобильных
-  });
-  
+  var levels = [{ width: 4096 }];
+  var source = Marzipano.ImageUrlSource.fromString(sceneData.imageUrl);
   var geometry = new Marzipano.EquirectGeometry(levels);
+  var limiter = Marzipano.RectilinearView.limit.traditional(4096, 100*Math.PI/180, 120*Math.PI/180);
+  var view = new Marzipano.RectilinearView(sceneData.initialView, limiter);
   
-  // Более совместимые лимиты для мобильных
-  var limiter = Marzipano.RectilinearView.limit.traditional(
-    4096, 
-    100 * Math.PI / 180, 
-    120 * Math.PI / 180
-  );
-  
-  var view = new Marzipano.RectilinearView(
-    sceneData.initialView || { yaw: 0, pitch: 0, fov: 100 * Math.PI / 180 }, 
-    limiter
-  );
-  
-  // Настройки для лучшей совместимости с мобильными
-  currentScene = viewer.createScene({
-    source: source,
-    geometry: geometry,
-    view: view,
-    pinFirstLevel: true
-  });
-  
-  currentScene.switchTo({ transitionDuration: 500 }, function(err) {
-    if (err) {
-      console.error('Error switching scene:', err);
-    }
+  currentScene = viewer.createScene({ source: source, geometry: geometry, view: view, pinFirstLevel: true });
+  currentScene.switchTo({}, function() {
     document.getElementById('loading').classList.add('hidden');
   });
   
@@ -232,8 +92,6 @@ function loadScene(sceneId) {
   document.querySelectorAll('.thumbnail').forEach(t => {
     t.classList.toggle('active', t.dataset.sceneId === sceneId);
   });
-  
-  updateMinimapPoints();
   
   renderHotspots(sceneData);
 }
@@ -318,6 +176,7 @@ function showInfoPopup(hotspot, x, y) {
   popupImageIndex = 0;
   const popup = document.getElementById('info-popup');
   popup.innerHTML = '';
+  popup.dataset.hotspotId = hotspot.id;
   
   const header = document.createElement('div');
   header.className = 'info-popup-header';
@@ -328,7 +187,46 @@ function showInfoPopup(hotspot, x, y) {
     const imagesDiv = document.createElement('div');
     imagesDiv.className = 'info-popup-images';
     imagesDiv.id = 'popup-images';
-    renderPopupImages(hotspot.images, imagesDiv);
+    
+    const img = document.createElement('img');
+    img.src = hotspot.images[popupImageIndex].url;
+    img.className = 'info-popup-image';
+    img.onclick = function() { openFullscreenImage(hotspot.images[popupImageIndex].url); };
+    imagesDiv.appendChild(img);
+    
+    // Fullscreen button
+    const fullscreenBtn = document.createElement('button');
+    fullscreenBtn.className = 'info-popup-fullscreen-btn';
+    fullscreenBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
+    fullscreenBtn.onclick = function(e) { 
+      e.stopPropagation(); 
+      openFullscreenImage(hotspot.images[popupImageIndex].url); 
+    };
+    imagesDiv.appendChild(fullscreenBtn);
+    
+    if (hotspot.images.length > 1) {
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'info-popup-nav prev';
+      prevBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>';
+      prevBtn.onclick = function(e) { e.stopPropagation(); prevImage(); };
+      imagesDiv.appendChild(prevBtn);
+      
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'info-popup-nav next';
+      nextBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>';
+      nextBtn.onclick = function(e) { e.stopPropagation(); nextImage(); };
+      imagesDiv.appendChild(nextBtn);
+      
+      const dotsDiv = document.createElement('div');
+      dotsDiv.className = 'info-popup-dots';
+      hotspot.images.forEach(function(_, i) {
+        const dot = document.createElement('div');
+        dot.className = 'info-popup-dot' + (i === popupImageIndex ? ' active' : '');
+        dotsDiv.appendChild(dot);
+      });
+      imagesDiv.appendChild(dotsDiv);
+    }
+    
     popup.appendChild(imagesDiv);
   }
   
@@ -349,54 +247,67 @@ function showInfoPopup(hotspot, x, y) {
   popup.style.left = Math.min(x, window.innerWidth - 380) + 'px';
   popup.style.top = Math.min(y, window.innerHeight - 400) + 'px';
   popup.classList.remove('hidden');
-  
-  popup.dataset.hotspotId = hotspot.id;
 }
 
-function renderPopupImages(images, container) {
-  const img = images[popupImageIndex];
-  container.innerHTML = '<div class="info-popup-image-wrapper">' +
-    '<img src="' + img.url + '" alt="" class="info-popup-main-image">' +
-    '<button class="info-popup-fullscreen" onclick="openFullscreenImage('' + img.url + '')" title="Полный экран">' +
-    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
-    '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>' +
-    '</svg></button></div>';
+function prevImage() {
+  const popup = document.getElementById('info-popup');
+  const hotspot = currentSceneData.hotspots.find(h => h.id === popup.dataset.hotspotId);
+  if (!hotspot || !hotspot.images) return;
+  popupImageIndex = popupImageIndex > 0 ? popupImageIndex - 1 : hotspot.images.length - 1;
   
-  if (images.length > 1) {
-    container.innerHTML += '<button class="info-popup-nav prev" onclick="prevImage(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>' +
-      '<button class="info-popup-nav next" onclick="nextImage(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>' +
-      '<div class="info-popup-dots">' + images.map((_, i) => '<div class="info-popup-dot' + (i === popupImageIndex ? ' active' : '') + '"></div>').join('') + '</div>';
-  }
+  const img = document.querySelector('.info-popup-image');
+  img.src = hotspot.images[popupImageIndex].url;
+  
+  const dots = document.querySelectorAll('.info-popup-dot');
+  dots.forEach((dot, i) => {
+    dot.className = 'info-popup-dot' + (i === popupImageIndex ? ' active' : '');
+  });
 }
 
-let fullscreenImageUrl = null;
+function nextImage() {
+  const popup = document.getElementById('info-popup');
+  const hotspot = currentSceneData.hotspots.find(h => h.id === popup.dataset.hotspotId);
+  if (!hotspot || !hotspot.images) return;
+  popupImageIndex = popupImageIndex < hotspot.images.length - 1 ? popupImageIndex + 1 : 0;
+  
+  const img = document.querySelector('.info-popup-image');
+  img.src = hotspot.images[popupImageIndex].url;
+  
+  const dots = document.querySelectorAll('.info-popup-dot');
+  dots.forEach((dot, i) => {
+    dot.className = 'info-popup-dot' + (i === popupImageIndex ? ' active' : '');
+  });
+}
+
+let currentFullscreenImage = null;
 let imageZoom = 1;
 
-function openFullscreenImage(url) {
-  fullscreenImageUrl = url;
+function openFullscreenImage(imageUrl) {
+  currentFullscreenImage = imageUrl;
   imageZoom = 1;
   
-  const modal = document.createElement('div');
-  modal.id = 'fullscreen-modal';
-  modal.className = 'fullscreen-modal';
-  modal.onclick = closeFullscreenImage;
+  const overlay = document.createElement('div');
+  overlay.id = 'fullscreen-overlay';
+  overlay.className = 'fullscreen-overlay';
+  overlay.onclick = closeFullscreenImage;
   
-  modal.innerHTML = '<button class="fullscreen-close" onclick="closeFullscreenImage()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' +
+  overlay.innerHTML = 
+    '<button class="fullscreen-close" onclick="closeFullscreenImage()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' +
     '<div class="fullscreen-controls">' +
-    '<button onclick="zoomOut(event)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>' +
-    '<span id="zoom-level">100%</span>' +
-    '<button onclick="zoomIn(event)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>' +
-    '<button onclick="resetZoom(event)">Сбросить</button>' +
+      '<button onclick="zoomOut(event)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>' +
+      '<div class="zoom-level">100%</div>' +
+      '<button onclick="zoomIn(event)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>' +
+      '<button onclick="resetZoom(event)">Сбросить</button>' +
     '</div>' +
-    '<div class="fullscreen-image-container" onclick="event.stopPropagation()"><img src="' + url + '" id="fullscreen-image"></div>';
+    '<div class="fullscreen-image-container" onclick="event.stopPropagation()"><img src="' + imageUrl + '" id="fullscreen-image" style="transform: scale(1)"></div>';
   
-  document.body.appendChild(modal);
+  document.body.appendChild(overlay);
 }
 
 function closeFullscreenImage() {
-  const modal = document.getElementById('fullscreen-modal');
-  if (modal) modal.remove();
-  fullscreenImageUrl = null;
+  const overlay = document.getElementById('fullscreen-overlay');
+  if (overlay) overlay.remove();
+  currentFullscreenImage = null;
   imageZoom = 1;
 }
 
@@ -422,28 +333,9 @@ function resetZoom(e) {
 
 function updateZoom() {
   const img = document.getElementById('fullscreen-image');
-  if (img) {
-    img.style.transform = 'scale(' + imageZoom + ')';
-    document.getElementById('zoom-level').textContent = Math.round(imageZoom * 100) + '%';
-  }
-}
-
-function prevImage(e) {
-  e.stopPropagation();
-  const popup = document.getElementById('info-popup');
-  const hotspot = currentSceneData.hotspots.find(h => h.id === popup.dataset.hotspotId);
-  if (!hotspot || !hotspot.images) return;
-  popupImageIndex = popupImageIndex > 0 ? popupImageIndex - 1 : hotspot.images.length - 1;
-  renderPopupImages(hotspot.images, document.getElementById('popup-images'));
-}
-
-function nextImage(e) {
-  e.stopPropagation();
-  const popup = document.getElementById('info-popup');
-  const hotspot = currentSceneData.hotspots.find(h => h.id === popup.dataset.hotspotId);
-  if (!hotspot || !hotspot.images) return;
-  popupImageIndex = popupImageIndex < hotspot.images.length - 1 ? popupImageIndex + 1 : 0;
-  renderPopupImages(hotspot.images, document.getElementById('popup-images'));
+  const zoomLevel = document.querySelector('.zoom-level');
+  if (img) img.style.transform = 'scale(' + imageZoom + ')';
+  if (zoomLevel) zoomLevel.textContent = Math.round(imageZoom * 100) + '%';
 }
 
 function closeInfoPopup() {
@@ -510,6 +402,23 @@ document.addEventListener('fullscreenchange', function() {
     btn.classList.remove('active');
   }
 });
+
+// Gallery toggle
+let galleryVisible = true;
+
+function toggleGallery() {
+  const gallery = document.getElementById('thumbnails');
+  const btn = document.getElementById('gallery-toggle-btn');
+  galleryVisible = !galleryVisible;
+  
+  if (galleryVisible) {
+    gallery.classList.remove('collapsed');
+    btn.classList.remove('active');
+  } else {
+    gallery.classList.add('collapsed');
+    btn.classList.add('active');
+  }
+}
 
 document.getElementById('viewer').addEventListener('click', closeInfoPopup);
 
