@@ -26,13 +26,13 @@ function initMinimap() {
   
   const size = MINIMAP_DATA.size || 200;
   
-  const html = '<div class="minimap-header">' +
-    '<div class="minimap-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Карта</span></div>' +
-    '<div class="minimap-controls">' +
-    '<button onclick="toggleMinimapSize(event)" title="Размер"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg></button>' +
-    '<button onclick="toggleMinimap()" title="Скрыть"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' +
+  const html = '<div class=\'minimap-header\'>' +
+    '<div class=\'minimap-title\'><svg width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><rect x=\'3\' y=\'3\' width=\'7\' height=\'7\'/><rect x=\'14\' y=\'3\' width=\'7\' height=\'7\'/><rect x=\'14\' y=\'14\' width=\'7\' height=\'7\'/><rect x=\'3\' y=\'14\' width=\'7\' height=\'7\'/></svg><span>Карта</span></div>' +
+    '<div class=\'minimap-controls\'>' +
+    '<button onclick=\'toggleMinimapSize(event)\' title=\'Размер\'><svg width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><path d=\'M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3\'/></svg></button>' +
+    '<button onclick=\'toggleMinimap()\' title=\'Скрыть\'><svg width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\'><line x1=\'18\' y1=\'6\' x2=\'6\' y2=\'18\'/><line x1=\'6\' y1=\'6\' x2=\'18\' y2=\'18\'/></svg></button>' +
     '</div></div>' +
-    '<div class="minimap-image"><img src="' + MINIMAP_DATA.imageUrl + '" alt="Map"><div id="minimap-points"></div></div>';
+    '<div class=\'minimap-image\'><img src=\'' + MINIMAP_DATA.imageUrl + '\' alt=\'Map\'><div id=\'minimap-points\'></div></div>';
   
   minimap.innerHTML = html;
   minimap.style.width = size + 'px';
