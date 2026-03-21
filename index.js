@@ -68,10 +68,19 @@ function loadScene(sceneId) {
   currentSceneData = sceneData;
   currentSceneId = sceneId;
   
-  var levels = [{ width: 4096 }];
+  // Detect max texture size for device (critical for mobile/Android)
+  var canvas = document.createElement('canvas');
+  var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  var maxTextureSize = gl ? gl.getParameter(gl.MAX_TEXTURE_SIZE) : 2048;
+  
+  // Use conservative size for mobile devices to avoid black screen
+  var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  var maxSize = isMobile ? Math.min(maxTextureSize, 2048) : Math.min(maxTextureSize, 4096);
+  
+  var levels = [{ width: maxSize }];
   var source = Marzipano.ImageUrlSource.fromString(sceneData.imageUrl);
   var geometry = new Marzipano.EquirectGeometry(levels);
-  var limiter = Marzipano.RectilinearView.limit.traditional(4096, 100*Math.PI/180, 120*Math.PI/180);
+  var limiter = Marzipano.RectilinearView.limit.traditional(maxSize, 100*Math.PI/180, 120*Math.PI/180);
   var view = new Marzipano.RectilinearView(sceneData.initialView, limiter);
   
   currentScene = viewer.createScene({ source: source, geometry: geometry, view: view, pinFirstLevel: true });
