@@ -1,37 +1,9 @@
 var APP_DATA = {
   "scenes": [
     {
-      "id": "1774132111864-8r5a0fw2l",
+      "id": "1774133654313-8iukxxjvt",
       "name": "1",
-      "imageUrl": "img/1774132111864-8r5a0fw2l.jpg",
-      "initialView": {
-        "yaw": -2.9473952843965012,
-        "pitch": 0.31108782776762567,
-        "fov": 1.5707963267948966
-      },
-      "hotspots": [
-        {
-          "id": "1774132130072-c5dy3nd4a",
-          "icon": "arrowUp",
-          "size": 40,
-          "rotation": 0,
-          "opacity": 1,
-          "positionType": "floor",
-          "description": "",
-          "images": [],
-          "type": "transition",
-          "yaw": -3.1286788395294085,
-          "pitch": 0.6003469109214912,
-          "text": "",
-          "targetSceneId": "1774132159308-u0mu7972q",
-          "color": "#f97316"
-        }
-      ]
-    },
-    {
-      "id": "1774132159308-u0mu7972q",
-      "name": "2",
-      "imageUrl": "img/1774132159308-u0mu7972q.jpg",
+      "imageUrl": "img/1774133654313-8iukxxjvt.jpg",
       "initialView": {
         "yaw": 0,
         "pitch": 0,
@@ -39,42 +11,70 @@ var APP_DATA = {
       },
       "hotspots": [
         {
-          "id": "1774132173856-rxy2n8av4",
-          "icon": "arrowUp",
-          "size": 40,
+          "id": "1774133668401-nmj9tymnk",
+          "icon": "drone",
+          "size": 53,
           "rotation": 0,
           "opacity": 1,
-          "positionType": "floor",
+          "positionType": "wall",
           "description": "",
           "images": [],
           "type": "transition",
-          "yaw": -1.7410126356900815,
-          "pitch": 0.5307736710245354,
+          "yaw": 0.8138440272151826,
+          "pitch": -0.37247516201982833,
           "text": "",
-          "targetSceneId": "1774132111864-8r5a0fw2l",
+          "targetSceneId": "1774133665679-5v6e79buo",
+          "color": "#f97316"
+        }
+      ]
+    },
+    {
+      "id": "1774133665679-5v6e79buo",
+      "name": "2",
+      "imageUrl": "img/1774133665679-5v6e79buo.jpg",
+      "initialView": {
+        "yaw": -1.8324138385962403,
+        "pitch": 0.21335524098925518,
+        "fov": 1.7453292519943295
+      },
+      "hotspots": [
+        {
+          "id": "1774133769869-8wv6beup9",
+          "icon": "arrowDownRight",
+          "size": 40,
+          "rotation": 0,
+          "opacity": 1,
+          "positionType": "wall",
+          "description": "",
+          "images": [],
+          "type": "transition",
+          "yaw": -2.5200290902138143,
+          "pitch": 0.5058335985765599,
+          "text": "",
+          "targetSceneId": "1774133654313-8iukxxjvt",
           "color": "#f97316"
         },
         {
-          "id": "1774132184166-d7fcg2mgt",
+          "id": "1774133820553-ekr6dp71y",
           "icon": "infoFilled",
-          "size": 66,
+          "size": 40,
           "rotation": 0,
           "opacity": 1,
           "positionType": "embedded",
-          "description": "",
+          "description": "Купаися",
           "images": [
             {
-              "url": "img/hotspot_1774132184166-d7fcg2mgt_0.jpg",
+              "url": "img/hotspot_1774133820553-ekr6dp71y_0.jpg",
               "file": {},
               "caption": ""
             }
           ],
           "type": "info",
-          "yaw": -2.337429274613889,
-          "pitch": 0.2399596384622651,
-          "text": "Новая метка",
+          "yaw": -1.219166101932494,
+          "pitch": 0.6295683120282831,
+          "text": "Басик",
           "targetSceneId": null,
-          "color": "#211a17"
+          "color": "#3b82f6"
         }
       ]
     }
@@ -87,16 +87,16 @@ var APP_DATA = {
     "viewControlButtons": true
   },
   "markerStyle": {
-    "textColor": "#e0e0e0",
+    "textColor": "#ffffff",
     "backgroundColor": "#ffffff",
-    "backgroundOpacity": 0,
+    "backgroundOpacity": 0.26,
     "borderWidth": 1,
-    "borderColor": "#454545",
+    "borderColor": "#d4d4d4",
     "fontSize": 12
   },
-  "homeSceneId": "1774132111864-8r5a0fw2l",
+  "homeSceneId": "1774133654313-8iukxxjvt",
   "autorotateSettings": {
     "enabled": true,
-    "speed": 0.7
+    "speed": 0.8
   }
 };

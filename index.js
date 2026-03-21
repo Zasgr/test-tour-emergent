@@ -176,7 +176,6 @@ function showInfoPopup(hotspot, x, y) {
   popupImageIndex = 0;
   const popup = document.getElementById('info-popup');
   popup.innerHTML = '';
-  popup.dataset.hotspotId = hotspot.id;
   
   const header = document.createElement('div');
   header.className = 'info-popup-header';
@@ -187,46 +186,7 @@ function showInfoPopup(hotspot, x, y) {
     const imagesDiv = document.createElement('div');
     imagesDiv.className = 'info-popup-images';
     imagesDiv.id = 'popup-images';
-    
-    const img = document.createElement('img');
-    img.src = hotspot.images[popupImageIndex].url;
-    img.className = 'info-popup-image';
-    img.onclick = function() { openFullscreenImage(hotspot.images[popupImageIndex].url); };
-    imagesDiv.appendChild(img);
-    
-    // Fullscreen button
-    const fullscreenBtn = document.createElement('button');
-    fullscreenBtn.className = 'info-popup-fullscreen-btn';
-    fullscreenBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>';
-    fullscreenBtn.onclick = function(e) { 
-      e.stopPropagation(); 
-      openFullscreenImage(hotspot.images[popupImageIndex].url); 
-    };
-    imagesDiv.appendChild(fullscreenBtn);
-    
-    if (hotspot.images.length > 1) {
-      const prevBtn = document.createElement('button');
-      prevBtn.className = 'info-popup-nav prev';
-      prevBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>';
-      prevBtn.onclick = function(e) { e.stopPropagation(); prevImage(); };
-      imagesDiv.appendChild(prevBtn);
-      
-      const nextBtn = document.createElement('button');
-      nextBtn.className = 'info-popup-nav next';
-      nextBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>';
-      nextBtn.onclick = function(e) { e.stopPropagation(); nextImage(); };
-      imagesDiv.appendChild(nextBtn);
-      
-      const dotsDiv = document.createElement('div');
-      dotsDiv.className = 'info-popup-dots';
-      hotspot.images.forEach(function(_, i) {
-        const dot = document.createElement('div');
-        dot.className = 'info-popup-dot' + (i === popupImageIndex ? ' active' : '');
-        dotsDiv.appendChild(dot);
-      });
-      imagesDiv.appendChild(dotsDiv);
-    }
-    
+    renderPopupImages(hotspot.images, imagesDiv);
     popup.appendChild(imagesDiv);
   }
   
@@ -244,98 +204,38 @@ function showInfoPopup(hotspot, x, y) {
     popup.appendChild(empty);
   }
   
-  popup.style.left = Math.min(x, window.innerWidth - 380) + 'px';
-  popup.style.top = Math.min(y, window.innerHeight - 400) + 'px';
+  popup.style.left = Math.min(x, window.innerWidth - 360) + 'px';
+  popup.style.top = Math.min(y, window.innerHeight - 300) + 'px';
   popup.classList.remove('hidden');
+  
+  popup.dataset.hotspotId = hotspot.id;
 }
 
-function prevImage() {
+function renderPopupImages(images, container) {
+  container.innerHTML = '<img src="' + images[popupImageIndex].url + '" alt="">';
+  if (images.length > 1) {
+    container.innerHTML += '<button class="info-popup-nav prev" onclick="prevImage(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>' +
+      '<button class="info-popup-nav next" onclick="nextImage(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>' +
+      '<div class="info-popup-dots">' + images.map((_, i) => '<div class="info-popup-dot' + (i === popupImageIndex ? ' active' : '') + '"></div>').join('') + '</div>';
+  }
+}
+
+function prevImage(e) {
+  e.stopPropagation();
   const popup = document.getElementById('info-popup');
   const hotspot = currentSceneData.hotspots.find(h => h.id === popup.dataset.hotspotId);
   if (!hotspot || !hotspot.images) return;
   popupImageIndex = popupImageIndex > 0 ? popupImageIndex - 1 : hotspot.images.length - 1;
-  
-  const img = document.querySelector('.info-popup-image');
-  img.src = hotspot.images[popupImageIndex].url;
-  
-  const dots = document.querySelectorAll('.info-popup-dot');
-  dots.forEach((dot, i) => {
-    dot.className = 'info-popup-dot' + (i === popupImageIndex ? ' active' : '');
-  });
+  renderPopupImages(hotspot.images, document.getElementById('popup-images'));
 }
 
-function nextImage() {
+function nextImage(e) {
+  e.stopPropagation();
   const popup = document.getElementById('info-popup');
   const hotspot = currentSceneData.hotspots.find(h => h.id === popup.dataset.hotspotId);
   if (!hotspot || !hotspot.images) return;
   popupImageIndex = popupImageIndex < hotspot.images.length - 1 ? popupImageIndex + 1 : 0;
-  
-  const img = document.querySelector('.info-popup-image');
-  img.src = hotspot.images[popupImageIndex].url;
-  
-  const dots = document.querySelectorAll('.info-popup-dot');
-  dots.forEach((dot, i) => {
-    dot.className = 'info-popup-dot' + (i === popupImageIndex ? ' active' : '');
-  });
-}
-
-let currentFullscreenImage = null;
-let imageZoom = 1;
-
-function openFullscreenImage(imageUrl) {
-  currentFullscreenImage = imageUrl;
-  imageZoom = 1;
-  
-  const overlay = document.createElement('div');
-  overlay.id = 'fullscreen-overlay';
-  overlay.className = 'fullscreen-overlay';
-  overlay.onclick = closeFullscreenImage;
-  
-  overlay.innerHTML = 
-    '<button class="fullscreen-close" onclick="closeFullscreenImage()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' +
-    '<div class="fullscreen-controls">' +
-      '<button onclick="zoomOut(event)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>' +
-      '<div class="zoom-level">100%</div>' +
-      '<button onclick="zoomIn(event)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>' +
-      '<button onclick="resetZoom(event)">Сбросить</button>' +
-    '</div>' +
-    '<div class="fullscreen-image-container" onclick="event.stopPropagation()"><img src="' + imageUrl + '" id="fullscreen-image" style="transform: scale(1)"></div>';
-  
-  document.body.appendChild(overlay);
-}
-
-function closeFullscreenImage() {
-  const overlay = document.getElementById('fullscreen-overlay');
-  if (overlay) overlay.remove();
-  currentFullscreenImage = null;
-  imageZoom = 1;
-}
-
-function zoomIn(e) {
-  e.stopPropagation();
-  if (imageZoom >= 3) return;
-  imageZoom = Math.min(3, imageZoom + 0.25);
-  updateZoom();
-}
-
-function zoomOut(e) {
-  e.stopPropagation();
-  if (imageZoom <= 0.5) return;
-  imageZoom = Math.max(0.5, imageZoom - 0.25);
-  updateZoom();
-}
-
-function resetZoom(e) {
-  e.stopPropagation();
-  imageZoom = 1;
-  updateZoom();
-}
-
-function updateZoom() {
-  const img = document.getElementById('fullscreen-image');
-  const zoomLevel = document.querySelector('.zoom-level');
-  if (img) img.style.transform = 'scale(' + imageZoom + ')';
-  if (zoomLevel) zoomLevel.textContent = Math.round(imageZoom * 100) + '%';
+  renderPopupImages(hotspot.images, document.getElementById('popup-images'));
 }
 
 function closeInfoPopup() {
@@ -402,23 +302,6 @@ document.addEventListener('fullscreenchange', function() {
     btn.classList.remove('active');
   }
 });
-
-// Gallery toggle
-let galleryVisible = true;
-
-function toggleGallery() {
-  const gallery = document.getElementById('thumbnails');
-  const btn = document.getElementById('gallery-toggle-btn');
-  galleryVisible = !galleryVisible;
-  
-  if (galleryVisible) {
-    gallery.classList.remove('collapsed');
-    btn.classList.remove('active');
-  } else {
-    gallery.classList.add('collapsed');
-    btn.classList.add('active');
-  }
-}
 
 document.getElementById('viewer').addEventListener('click', closeInfoPopup);
 
