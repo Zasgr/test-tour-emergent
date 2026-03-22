@@ -10,6 +10,23 @@ let autorotateAnimationId = null;
 let imageZoom = 1;
 let galleryVisible = true;
 
+// Определяем максимальный размер текстуры устройства
+function getMaxTextureSize() {
+  try {
+    var canvas = document.createElement('canvas');
+    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (gl) {
+      var max = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+      canvas.width = 1;
+      canvas.height = 1;
+      return max;
+    }
+  } catch (e) {}
+  return 2048;
+}
+
+var MAX_TEXTURE_SIZE = getMaxTextureSize();
+
 // Icon SVGs
 const ICONS = {
   arrowRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
@@ -39,7 +56,6 @@ function init() {
     loadScene(HOME_SCENE_ID || SCENES_DATA[0].id);
   }
   
-  // Hide gallery toggle if only 1 scene
   if (SCENES_DATA.length <= 1) {
     var toggleBtn = document.getElementById('gallery-toggle');
     if (toggleBtn) toggleBtn.style.display = 'none';
@@ -76,10 +92,20 @@ function loadScene(sceneId) {
   currentSceneData = sceneData;
   currentSceneId = sceneId;
   
-  var levels = [{ width: 4096 }];
+  var cappedSize = Math.min(4096, MAX_TEXTURE_SIZE);
+  var levels = [];
+  var s = 256;
+  while (s <= cappedSize) {
+    levels.push({ width: s });
+    s *= 2;
+  }
+  if (levels.length === 0) {
+    levels.push({ width: 2048 });
+  }
+  
   var source = Marzipano.ImageUrlSource.fromString(sceneData.imageUrl);
   var geometry = new Marzipano.EquirectGeometry(levels);
-  var limiter = Marzipano.RectilinearView.limit.traditional(4096, 100*Math.PI/180, 120*Math.PI/180);
+  var limiter = Marzipano.RectilinearView.limit.traditional(cappedSize, 100*Math.PI/180, 120*Math.PI/180);
   var view = new Marzipano.RectilinearView(sceneData.initialView, limiter);
   
   currentScene = viewer.createScene({ source: source, geometry: geometry, view: view, pinFirstLevel: true });
@@ -212,17 +238,14 @@ function showInfoPopup(hotspot, x, y) {
     popup.appendChild(empty);
   }
   
-  // Smart positioning
   var popupWidth = 360;
   var popupHeight = 300;
   var left = x;
   var top = y;
   
-  // Adjust for right edge
   if (x + popupWidth > window.innerWidth) {
     left = Math.max(16, window.innerWidth - popupWidth - 16);
   }
-  // Adjust for bottom edge
   if (y + popupHeight > window.innerHeight) {
     top = Math.max(16, window.innerHeight - popupHeight - 16);
   }
@@ -317,7 +340,6 @@ function toggleFullscreen() {
   }
 }
 
-// Listen for fullscreen changes
 document.addEventListener('fullscreenchange', function() {
   const btn = document.getElementById('fullscreen-btn');
   if (document.fullscreenElement) {
@@ -327,7 +349,6 @@ document.addEventListener('fullscreenchange', function() {
   }
 });
 
-// Fullscreen Image Viewer
 function openFullscreenViewer(imageUrl) {
   event.stopPropagation();
   imageZoom = 1;
@@ -370,7 +391,6 @@ function updateZoom() {
   document.getElementById('zoom-level').textContent = Math.round(imageZoom * 100) + '%';
 }
 
-// Gallery Toggle
 function toggleGallery() {
   galleryVisible = !galleryVisible;
   var gallery = document.getElementById('thumbnails');
