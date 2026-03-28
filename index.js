@@ -56,15 +56,16 @@ function renderThumbnails() {
     const thumb = document.createElement('div');
     thumb.className = 'thumbnail';
     thumb.dataset.sceneId = scene.id;
-    thumb.innerHTML = '<img src="' + scene.imageUrl + '" alt="' + scene.name + '">' + 
+    // Use preview image for thumbnail
+    thumb.innerHTML = '<img src="tiles/' + scene.id + '/preview.jpg" alt="' + scene.name + '">' + 
       (scene.id === HOME_SCENE_ID ? '<div class="home-indicator"><svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>' : '');
-    thumb.onclick = () => loadScene(scene.id);
+    thumb.onclick = function() { loadScene(scene.id); };
     container.appendChild(thumb);
   });
 }
 
 function loadScene(sceneId) {
-  const sceneData = SCENES_DATA.find(s => s.id === sceneId);
+  const sceneData = SCENES_DATA.find(function(s) { return s.id === sceneId; });
   if (!sceneData) return;
   
   document.getElementById('loading').classList.remove('hidden');
@@ -76,14 +77,28 @@ function loadScene(sceneId) {
   currentSceneData = sceneData;
   currentSceneId = sceneId;
   
-  // Multiple levels for WebGL compatibility (Android devices often have 2048 or 1024 texture limits)
-  var levels = [{ width: 1024 }, { width: 2048 }, { width: 4096 }];
-  var source = Marzipano.ImageUrlSource.fromString(sceneData.imageUrl);
-  var geometry = new Marzipano.EquirectGeometry(levels);
-  var limiter = Marzipano.RectilinearView.limit.traditional(4096, 100*Math.PI/180, 120*Math.PI/180);
+  // CubeGeometry with tiled source
+  var source = Marzipano.ImageUrlSource.fromString(
+    'tiles/' + sceneData.id + '/{z}/{f}/{y}/{x}.jpg',
+    { cubeMapPreviewUrl: 'tiles/' + sceneData.id + '/preview.jpg' }
+  );
+  
+  var geometry = new Marzipano.CubeGeometry(sceneData.levels);
+  
+  var limiter = Marzipano.RectilinearView.limit.traditional(
+    sceneData.faceSize,
+    100 * Math.PI / 180,
+    120 * Math.PI / 180
+  );
   var view = new Marzipano.RectilinearView(sceneData.initialView, limiter);
   
-  currentScene = viewer.createScene({ source: source, geometry: geometry, view: view, pinFirstLevel: true });
+  currentScene = viewer.createScene({ 
+    source: source, 
+    geometry: geometry, 
+    view: view, 
+    pinFirstLevel: true 
+  });
+  
   currentScene.switchTo({}, function() {
     document.getElementById('loading').classList.add('hidden');
   });
@@ -98,7 +113,7 @@ function loadScene(sceneId) {
     homeBtn.classList.add('hidden');
   }
   
-  document.querySelectorAll('.thumbnail').forEach(t => {
+  document.querySelectorAll('.thumbnail').forEach(function(t) {
     t.classList.toggle('active', t.dataset.sceneId === sceneId);
   });
   
@@ -113,18 +128,18 @@ function renderHotspots(sceneData) {
   hotspotsContainer.innerHTML = '';
   if (!sceneData.hotspots || sceneData.hotspots.length === 0) return;
   
-  sceneData.hotspots.forEach(hotspot => {
-    const element = document.createElement('div');
+  sceneData.hotspots.forEach(function(hotspot) {
+    var element = document.createElement('div');
     element.className = 'hotspot ' + (hotspot.type === 'transition' ? 'hotspot-transition' : 'hotspot-info');
     element.style.pointerEvents = 'auto';
     
-    const size = hotspot.size || 40;
-    const rotation = hotspot.rotation || 0;
-    const opacity = hotspot.opacity !== undefined ? hotspot.opacity : 1;
-    const color = hotspot.color || (hotspot.type === 'info' ? '#3b82f6' : '#f97316');
-    const positionType = hotspot.positionType || 'embedded';
+    var size = hotspot.size || 40;
+    var rotation = hotspot.rotation || 0;
+    var opacity = hotspot.opacity !== undefined ? hotspot.opacity : 1;
+    var color = hotspot.color || (hotspot.type === 'info' ? '#3b82f6' : '#f97316');
+    var positionType = hotspot.positionType || 'embedded';
     
-    let iconTransform = 'rotate(' + rotation + 'deg)';
+    var iconTransform = 'rotate(' + rotation + 'deg)';
     if (positionType === 'floor') {
       iconTransform = 'rotate(' + rotation + 'deg) rotateX(60deg)';
     }
@@ -134,7 +149,7 @@ function renderHotspots(sceneData) {
       '</div>';
     
     if (hotspot.type === 'info' && hotspot.text) {
-      const label = document.createElement('div');
+      var label = document.createElement('div');
       label.className = 'hotspot-label';
       label.textContent = hotspot.text;
       label.style.color = MARKER_STYLE.textColor;
@@ -145,9 +160,9 @@ function renderHotspots(sceneData) {
     }
     
     if (hotspot.type === 'transition' && hotspot.targetSceneId) {
-      element.onclick = () => loadScene(hotspot.targetSceneId);
+      element.onclick = function() { loadScene(hotspot.targetSceneId); };
     } else if (hotspot.type === 'info') {
-      element.onclick = (e) => {
+      element.onclick = function(e) {
         e.stopPropagation();
         showInfoPopup(hotspot, e.clientX, e.clientY);
       };
@@ -158,14 +173,14 @@ function renderHotspots(sceneData) {
   
   function updatePositions() {
     if (!currentScene) return;
-    const view = currentScene.view();
-    const hotspotElements = hotspotsContainer.querySelectorAll('.hotspot');
+    var view = currentScene.view();
+    var hotspotElements = hotspotsContainer.querySelectorAll('.hotspot');
     
-    currentSceneData.hotspots.forEach((hotspot, index) => {
-      const el = hotspotElements[index];
+    currentSceneData.hotspots.forEach(function(hotspot, index) {
+      var el = hotspotElements[index];
       if (!el) return;
       
-      const coords = view.coordinatesToScreen({ yaw: hotspot.yaw, pitch: hotspot.pitch });
+      var coords = view.coordinatesToScreen({ yaw: hotspot.yaw, pitch: hotspot.pitch });
       if (coords && coords.x >= 0 && coords.x <= window.innerWidth && coords.y >= 0 && coords.y <= window.innerHeight) {
         el.style.left = coords.x + 'px';
         el.style.top = coords.y + 'px';
@@ -183,16 +198,16 @@ function renderHotspots(sceneData) {
 
 function showInfoPopup(hotspot, x, y) {
   popupImageIndex = 0;
-  const popup = document.getElementById('info-popup');
+  var popup = document.getElementById('info-popup');
   popup.innerHTML = '';
   
-  const header = document.createElement('div');
+  var header = document.createElement('div');
   header.className = 'info-popup-header';
   header.innerHTML = '<h3>' + (hotspot.text || 'Информация') + '</h3><button class="info-popup-close" onclick="closeInfoPopup()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
   popup.appendChild(header);
   
   if (hotspot.images && hotspot.images.length > 0) {
-    const imagesDiv = document.createElement('div');
+    var imagesDiv = document.createElement('div');
     imagesDiv.className = 'info-popup-images';
     imagesDiv.id = 'popup-images';
     renderPopupImages(hotspot.images, imagesDiv);
@@ -200,33 +215,25 @@ function showInfoPopup(hotspot, x, y) {
   }
   
   if (hotspot.description) {
-    const content = document.createElement('div');
+    var content = document.createElement('div');
     content.className = 'info-popup-content' + (hotspot.description.length > 200 ? ' scrollable' : '');
     content.innerHTML = '<p>' + hotspot.description + '</p>';
     popup.appendChild(content);
   }
   
   if (!hotspot.description && (!hotspot.images || hotspot.images.length === 0)) {
-    const empty = document.createElement('div');
+    var empty = document.createElement('div');
     empty.className = 'info-popup-empty';
     empty.textContent = 'Нет дополнительной информации';
     popup.appendChild(empty);
   }
   
-  // Smart positioning
-  var popupWidth = 360;
-  var popupHeight = 300;
-  var left = x;
-  var top = y;
-  
-  // Adjust for right edge
-  if (x + popupWidth > window.innerWidth) {
-    left = Math.max(16, window.innerWidth - popupWidth - 16);
-  }
-  // Adjust for bottom edge
-  if (y + popupHeight > window.innerHeight) {
-    top = Math.max(16, window.innerHeight - popupHeight - 16);
-  }
+  var popupWidth = 380;
+  var popupHeight = 350;
+  var left = Math.min(x, window.innerWidth - popupWidth - 16);
+  var top = Math.min(y, window.innerHeight - popupHeight - 16);
+  left = Math.max(16, left);
+  top = Math.max(16, top);
   
   popup.style.left = left + 'px';
   popup.style.top = top + 'px';
@@ -241,14 +248,14 @@ function renderPopupImages(images, container) {
   if (images.length > 1) {
     container.innerHTML += '<button class="info-popup-nav prev" onclick="prevImage(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>' +
       '<button class="info-popup-nav next" onclick="nextImage(event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>' +
-      '<div class="info-popup-dots">' + images.map((_, i) => '<div class="info-popup-dot' + (i === popupImageIndex ? ' active' : '') + '"></div>').join('') + '</div>';
+      '<div class="info-popup-dots">' + images.map(function(_, i) { return '<div class="info-popup-dot' + (i === popupImageIndex ? ' active' : '') + '"></div>'; }).join('') + '</div>';
   }
 }
 
 function prevImage(e) {
   e.stopPropagation();
-  const popup = document.getElementById('info-popup');
-  const hotspot = currentSceneData.hotspots.find(h => h.id === popup.dataset.hotspotId);
+  var popup = document.getElementById('info-popup');
+  var hotspot = currentSceneData.hotspots.find(function(h) { return h.id === popup.dataset.hotspotId; });
   if (!hotspot || !hotspot.images) return;
   popupImageIndex = popupImageIndex > 0 ? popupImageIndex - 1 : hotspot.images.length - 1;
   renderPopupImages(hotspot.images, document.getElementById('popup-images'));
@@ -256,8 +263,8 @@ function prevImage(e) {
 
 function nextImage(e) {
   e.stopPropagation();
-  const popup = document.getElementById('info-popup');
-  const hotspot = currentSceneData.hotspots.find(h => h.id === popup.dataset.hotspotId);
+  var popup = document.getElementById('info-popup');
+  var hotspot = currentSceneData.hotspots.find(function(h) { return h.id === popup.dataset.hotspotId; });
   if (!hotspot || !hotspot.images) return;
   popupImageIndex = popupImageIndex < hotspot.images.length - 1 ? popupImageIndex + 1 : 0;
   renderPopupImages(hotspot.images, document.getElementById('popup-images'));
@@ -269,7 +276,7 @@ function closeInfoPopup() {
 
 function toggleAutorotate() {
   autorotateEnabled = !autorotateEnabled;
-  const btn = document.getElementById('autorotate-btn');
+  var btn = document.getElementById('autorotate-btn');
   if (autorotateEnabled) {
     btn.classList.add('active');
     startAutorotate();
@@ -281,17 +288,17 @@ function toggleAutorotate() {
 
 function startAutorotate() {
   if (!currentScene || autorotateAnimationId) return;
-  const baseSpeed = 0.0001;
-  const speed = baseSpeed * (AUTOROTATE_SETTINGS.speed || 0.3);
-  let lastTime = Date.now();
+  var baseSpeed = 0.0001;
+  var speed = baseSpeed * (AUTOROTATE_SETTINGS.speed || 0.3);
+  var lastTime = Date.now();
   
   function rotate() {
-    const now = Date.now();
-    const delta = now - lastTime;
+    var now = Date.now();
+    var delta = now - lastTime;
     lastTime = now;
     
-    const view = currentScene.view();
-    const yaw = view.yaw();
+    var view = currentScene.view();
+    var yaw = view.yaw();
     view.setYaw(yaw + (speed * delta));
     
     autorotateAnimationId = requestAnimationFrame(rotate);
@@ -308,7 +315,7 @@ function stopAutorotate() {
 }
 
 function toggleFullscreen() {
-  const btn = document.getElementById('fullscreen-btn');
+  var btn = document.getElementById('fullscreen-btn');
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen();
     btn.classList.add('active');
@@ -318,9 +325,8 @@ function toggleFullscreen() {
   }
 }
 
-// Listen for fullscreen changes
 document.addEventListener('fullscreenchange', function() {
-  const btn = document.getElementById('fullscreen-btn');
+  var btn = document.getElementById('fullscreen-btn');
   if (document.fullscreenElement) {
     btn.classList.add('active');
   } else {
@@ -328,12 +334,11 @@ document.addEventListener('fullscreenchange', function() {
   }
 });
 
-// Fullscreen Image Viewer
 function openFullscreenViewer(imageUrl) {
   event.stopPropagation();
   imageZoom = 1;
-  const viewer = document.getElementById('fullscreen-viewer');
-  const img = document.getElementById('fullscreen-image');
+  var viewer = document.getElementById('fullscreen-viewer');
+  var img = document.getElementById('fullscreen-image');
   img.src = imageUrl;
   img.style.transform = 'scale(1)';
   document.getElementById('zoom-level').textContent = '100%';
@@ -371,7 +376,6 @@ function updateZoom() {
   document.getElementById('zoom-level').textContent = Math.round(imageZoom * 100) + '%';
 }
 
-// Gallery Toggle
 function toggleGallery() {
   galleryVisible = !galleryVisible;
   var gallery = document.getElementById('thumbnails');

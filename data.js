@@ -1,91 +1,24 @@
 var APP_DATA = {
   "scenes": [
     {
-      "id": "1774188058307-j8fx81j2v",
-      "name": "1",
-      "imageUrl": "img/1774188058307-j8fx81j2v.jpg",
-      "initialView": {
-        "yaw": 0,
-        "pitch": 0,
-        "fov": 1.5707963267948966
-      },
-      "hotspots": [
-        {
-          "id": "1774188169662-bb454suyv",
-          "icon": "drone",
-          "size": 50,
-          "rotation": 0,
-          "opacity": 1,
-          "positionType": "embedded",
-          "description": "",
-          "images": [],
-          "type": "transition",
-          "yaw": 0.8403326309508969,
-          "pitch": -0.36783474367774716,
-          "text": "",
-          "targetSceneId": "1774188066260-cbs4ld4n7",
-          "color": "#f97316"
-        },
-        {
-          "id": "1774188189106-7q8mh7gad",
-          "icon": "drone",
-          "size": 40,
-          "rotation": 0,
-          "opacity": 1,
-          "positionType": "embedded",
-          "description": "",
-          "images": [],
-          "type": "transition",
-          "yaw": -3.0334026696999175,
-          "pitch": -0.3607949622750528,
-          "text": "",
-          "targetSceneId": "1774188080853-9mrx0vpy0",
-          "color": "#f97316"
-        },
-        {
-          "id": "1774188456172-pg3k8goa7",
-          "icon": "drone",
-          "size": 25,
-          "rotation": 0,
-          "opacity": 0.8,
-          "positionType": "embedded",
-          "description": "",
-          "images": [],
-          "type": "transition",
-          "yaw": 0.47904416168212016,
-          "pitch": -0.3982798226562547,
-          "text": "",
-          "targetSceneId": "1774188073639-qijxyzugf",
-          "color": "#f97316"
-        },
-        {
-          "id": "1774188895347-za2emwzyk",
-          "icon": "image",
-          "size": 30,
-          "rotation": 0,
-          "opacity": 1,
-          "positionType": "embedded",
-          "description": "Summer vibes",
-          "images": [
-            {
-              "url": "img/hotspot_1774188895347-za2emwzyk_0.jpg",
-              "file": {},
-              "caption": ""
-            }
-          ],
-          "type": "info",
-          "yaw": -0.5397853637726424,
-          "pitch": 0.2218352645859465,
-          "text": "Терраса ",
-          "targetSceneId": null,
-          "color": "#3b82f6"
-        }
-      ]
-    },
-    {
       "id": "1774188066260-cbs4ld4n7",
       "name": "2",
-      "imageUrl": "img/1774188066260-cbs4ld4n7.jpg",
+      "faceSize": 2048,
+      "levels": [
+        {
+          "tileSize": 512,
+          "size": 512,
+          "fallbackOnly": true
+        },
+        {
+          "tileSize": 512,
+          "size": 1024
+        },
+        {
+          "tileSize": 512,
+          "size": 2048
+        }
+      ],
       "initialView": {
         "yaw": 0,
         "pitch": 0,
@@ -195,7 +128,22 @@ var APP_DATA = {
     {
       "id": "1774188073639-qijxyzugf",
       "name": "3",
-      "imageUrl": "img/1774188073639-qijxyzugf.jpg",
+      "faceSize": 2048,
+      "levels": [
+        {
+          "tileSize": 512,
+          "size": 512,
+          "fallbackOnly": true
+        },
+        {
+          "tileSize": 512,
+          "size": 1024
+        },
+        {
+          "tileSize": 512,
+          "size": 2048
+        }
+      ],
       "initialView": {
         "yaw": -0.07565260477891655,
         "pitch": 0.42993455979855355,
@@ -255,7 +203,22 @@ var APP_DATA = {
     {
       "id": "1774188080853-9mrx0vpy0",
       "name": "4",
-      "imageUrl": "img/1774188080853-9mrx0vpy0.jpg",
+      "faceSize": 2048,
+      "levels": [
+        {
+          "tileSize": 512,
+          "size": 512,
+          "fallbackOnly": true
+        },
+        {
+          "tileSize": 512,
+          "size": 1024
+        },
+        {
+          "tileSize": 512,
+          "size": 2048
+        }
+      ],
       "initialView": {
         "yaw": 0.06361362993133923,
         "pitch": 0.3373622040534343,
