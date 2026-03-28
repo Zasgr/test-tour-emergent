@@ -3,14 +3,7 @@ var APP_DATA = {
     {
       "id": "1774705166084-8sedkvw6f",
       "name": "1",
-      "faceSize": 512,
-      "levels": [
-        {
-          "tileSize": 512,
-          "size": 512,
-          "fallbackOnly": true
-        }
-      ],
+      "imageUrl": "img/1774705166084-8sedkvw6f.jpg",
       "initialView": {
         "yaw": 0,
         "pitch": 0,
@@ -54,14 +47,7 @@ var APP_DATA = {
     {
       "id": "1774705173811-hwxtew0ba",
       "name": "2",
-      "faceSize": 512,
-      "levels": [
-        {
-          "tileSize": 512,
-          "size": 512,
-          "fallbackOnly": true
-        }
-      ],
+      "imageUrl": "img/1774705173811-hwxtew0ba.jpg",
       "initialView": {
         "yaw": 0,
         "pitch": 0,
@@ -105,14 +91,7 @@ var APP_DATA = {
     {
       "id": "1774705181935-o5g3n0oa1",
       "name": "3",
-      "faceSize": 512,
-      "levels": [
-        {
-          "tileSize": 512,
-          "size": 512,
-          "fallbackOnly": true
-        }
-      ],
+      "imageUrl": "img/1774705181935-o5g3n0oa1.jpg",
       "initialView": {
         "yaw": 0,
         "pitch": 0,
